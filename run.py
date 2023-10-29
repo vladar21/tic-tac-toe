@@ -13,5 +13,22 @@ def display_start_board():
     print(" --------- ")
     print(f" {start_board[6]} | {start_board[7]} | {start_board[8]} ")
 
-# Display start board
-display_start_board()
+def main():
+    # Display start board
+    display_start_board()
+    start = str(input("\nLet `s start? \n(Yes - y or Y, No - any other)\n"))
+    if start.lower() == 'y':
+        print('\nGame starting.\n')
+        while True:  
+            print("starting while true cicle")
+            break
+    else:
+        print("\nGame over.\n")
+        
+
+    
+          
+        
+
+
+main()
