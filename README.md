@@ -7,6 +7,8 @@ This Python command-line game, "Tic-tac-toe", allows you to compete against arti
 ## Description
 This console-based Tic-Tac-Toe game provides an opportunity to play the classic game against an AI opponent. The AI can be trained through gameplay data and then used to make predictions based on its training. The game is designed to provide an enjoyable and challenging experience for players of all skill levels.
 
+ ![Start display](images/tic_tac_toe_start.jpg)
+
 ## User Goals
 - **Play Tic-Tac-Toe:** Users can play the game against the AI.
 - **Train the AI:** Users can train the AI model by playing games against it.
@@ -31,7 +33,8 @@ As a user, I want to:
 - **AI Model Training:** Users can train the AI model through gameplay data.
 - **AI Model Usage:** Trained AI models can be loaded and used to play against.
 - **User-Friendly Moves:** The game provides an intuitive way for users to make moves.
-- **Outcome Feedback:** At the end of the game, the outcome is displayed.
+- **Outcome Feedback:** At the end of the game, the outcome is displayed as a Winner.
+- **Statistics:** After completing the game, users can view common statistics, including total human and AI wins or draws.
 
 ## Technologies Used
 - **Python:** The core programming language used for the game.

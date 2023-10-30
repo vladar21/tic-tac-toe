@@ -4,16 +4,22 @@
 
 # Start board
 def display_start_board():
-    print("\nWelcome to the good old game of Tic-Tac-Toe in a modern interpretation.\n")
-    print("Your opponent will be a self-learning artificial intelligence.\n")
+    print("\nTic Tac Toe with Ai")
+    print()
+    print('Game rules:')
+    print("Your turn will have symbol 'X', the AI turn - symbol 'O'.")
+    print("The winner must have three of their symbols in a line, vertically or horizontally.")
+    print("\nGameplay field: ")
     start_board = ['0', '1', '2', '3', '4', '5', '6', '7', '8']
-    print(f" {start_board[0]} | {start_board[1]} | {start_board[2]} ")
+    print(f"\n {start_board[0]} | {start_board[1]} | {start_board[2]} ")
     print(" --------- ")
     print(f" {start_board[3]} | {start_board[4]} | {start_board[5]} ")
     print(" --------- ")
     print(f" {start_board[6]} | {start_board[7]} | {start_board[8]} ")
 
 def main():
+    # Main game loop
+    current_player = 1
     # Display start board
     display_start_board()
     start = str(input("\nLet `s start? \n(Yes - y or Y, No - any other)\n"))
@@ -25,10 +31,4 @@ def main():
     else:
         print("\nGame over.\n")
         
-
-    
-          
-        
-
-
 main()
