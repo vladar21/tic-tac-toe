@@ -31,15 +31,11 @@ def display_start_board():
     print(" --------- ")
     print(f" {start_board[6]} | {start_board[7]} | {start_board[8]} ")
 
-import gspread
-from google.oauth2.service_account import Credentials
-
-import gspread
-from google.oauth2.service_account import Credentials
-
-def update_leaderboards(leaderboard_sheet, human_nickname, win_human, win_ai):
-   
-    leaderboard_old_data = leaderboard_sheet.get_all_values()
+def update_leadersboard(leadersboard_sheet, human_nickname, win_human, win_ai):
+    """
+    Update leadersboard data on the Google Sheet
+    """
+    leaderboard_old_data = leadersboard_sheet.get_all_values()
 
     # Find the row index for the given human_nickname, if it exists
     row_index = None
@@ -55,29 +51,13 @@ def update_leaderboards(leaderboard_sheet, human_nickname, win_human, win_ai):
         win_ai = int(row[3]) + win_ai
         total_games = int(row[1]) + 1
 
-        leaderboard_sheet.update(f'C{row_index+2}', [[win_human]])
-        leaderboard_sheet.update(f'D{row_index+2}', [[win_ai]])
-        leaderboard_sheet.update(f'B{row_index+2}', [[total_games]])
+        leadersboard_sheet.update(f'C{row_index+2}', [[win_human]])
+        leadersboard_sheet.update(f'D{row_index+2}', [[win_ai]])
+        leadersboard_sheet.update(f'B{row_index+2}', [[total_games]])
     else:
         # Create a new row with the given values
         new_row = [human_nickname, 1, win_human, win_ai]
-        leaderboard_sheet.append_table(new_row)
-
-
-
-    
-
-def save_board_to_google_sheets(board, move):
-    scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
-    creds = Credentials.from_service_account_file('creds.json', scopes=scope)
-    gc = gspread.authorize(creds)
-
-    spreadsheet = gc.open_by_key('1N2eosTHbj1OdRRdJkLrf2IKxIXOp1k80wb2kht6caJc')
-    worksheet = spreadsheet.worksheet('cross_zerro')
-
-    board_str = "".join(["X" if cell == 1 else "O" if cell == -1 else " " for row in board for cell in row])
-    data_to_insert = [[board_str, move]]
-    worksheet.insert_rows(data_to_insert, 2)
+        leadersboard_sheet.append_row(new_row)
 
 def main():
     # Main game loop
