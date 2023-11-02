@@ -17,9 +17,7 @@ leadersboard_sheet = SHEET.worksheet('leadersboard')
 tic_tac_toe_data_sheet = SHEET.worksheet('tic_tac_toe_data_sheet')
 
 # Start board
-def display_start_board():
-    print("\nTic Tac Toe with Ai")
-    print()
+def display_start_game():
     print('Game rules:')
     print("Your turn will have symbol 'X', the AI turn - symbol 'O'.")
     print("The winner must have three of their symbols in a line, vertically or horizontally.")
@@ -30,6 +28,10 @@ def display_start_board():
     print(f" {start_board[3]} | {start_board[4]} | {start_board[5]} ")
     print(" --------- ")
     print(f" {start_board[6]} | {start_board[7]} | {start_board[8]} ")
+
+def display_leadersboard():
+    print()
+    input("Do you want to play game or look at the leadersboard? (Y - game, any other - look at)")
 
 def update_leadersboard(leadersboard_sheet, human_nickname, win_human, win_ai):
     """
@@ -62,14 +64,18 @@ def update_leadersboard(leadersboard_sheet, human_nickname, win_human, win_ai):
 def main():
     # Main game loop
     current_player = 1
-    # Display start board
-    display_start_board()
-    start = str(input("\nLet `s start? \n(Yes - y or Y, No - any other)\n"))
-    if start.lower() == 'y':
+    print("\nTic Tac Toe with Ai")
+    print()
+    start = str(input("Do you want to play game, exit or look at the leadersboard? \n(Y - game, L - leadersboar, any other - exit): "))
+    start = start.lower()
+    # Main game loop
+    if start == 'y':
         print('\nGame starting.\n')
         while True:  
             print("starting while true cicle")
             break
+    elif start == 'l':
+        display_start_game()
     else:
         print("\nGame over.\n")
         
