@@ -30,8 +30,7 @@ def display_start_game():
     print(f" {start_board[6]} | {start_board[7]} | {start_board[8]} ")
 
 def display_leadersboard():
-    print()
-    input("Do you want to play game or look at the leadersboard? (Y - game, any other - look at)")
+    print("Leadersboard")
 
 def update_leadersboard(leadersboard_sheet, human_nickname, win_human, win_ai):
     """
@@ -72,10 +71,10 @@ def main():
     if start == 'y':
         print('\nGame starting.\n')
         while True:  
-            print("starting while true cicle")
+            display_start_game()
             break
     elif start == 'l':
-        display_start_game()
+        display_leadersboard()
     else:
         print("\nGame over.\n")
         
