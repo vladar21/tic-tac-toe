@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "tictactoegame-403900",
+  "private_key_id": "96badcca1e07e4ae1e1c40b02cc680e90db3bef1",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCp0MiFufwE13Bj\n4FqFBo+oYRMhB6MqvD0SSA1/hhxdjravJAR/duhyQFiFELHlnOZo6cQLnb0/Uw4R\nL5YK2/NvWcr2qGo2r3J73HnhpgpquuwrVU6LuWo2oZv4s5nIQrtzpvmJwY91llZ5\nqyB9TMaKhzCVvT+V1QF8D0EiBu7kcYFNgGjzrc414K8PJZ/prILtZt7Z+wQTxY4h\nFW73sKhhXZWxyjMn0E1Kkn5mNKoyzBpT3ZtNpEOCKE++ExgS7b2njVQ0mkVj/89s\nhFmBPbxml90Th9hGRGuMi1CS90NsaQtzise+FlDMi4G/TSjpeOYtIBVSdiQMVlz/\ngI5GJRyHAgMBAAECggEACT4a2+RuihjrvhPk+V6NDR4Te3W99MKAFHGlgm5bNuBg\noxGzyPhA2I8WAlARTq0GgWlPyU4RkdPEbT0IzpiAHGxntpseBNHxyjoKzDRMVtjL\np+QhvUsfM9AB/DxSP2saZsYMyOmnFEBVfpPI1ekK2VlYVJ4TSuVoCkeORPrZn8dT\nDYQt203iP6+dHUCqsq07EKyChWwxe2GSmiT+a0Rhe1gXpUvuBO76aq7oDp3Vb/6s\nJm24j7A3H/aWF66IHLJN1j9cLepRLVFwr7fjYq9QCt6ZfjKg8kwkQAWbdVlcjWwz\nBFyklq7eAb19ISTK+dCuFUp/EpiizQoqRzOjvQqU+QKBgQDVPUQduOl7qBvFasMH\ndi6QO2lMfqzDP7U8Xe7NjnIaj8Qw30/iepMpQZVpfUHgindw+PnBXut+ITa3aLGQ\nAZ3zenlpUdnH0RQV3CkkkxkZSOrM96lhx7anle1T37nOVlBW/SE5QxAduYpigwC0\no/7HFnhPEeu1YnaV6zmbwuVQdQKBgQDL3lbktXBQJP8PVJf+xOIVlPRfC/MdC9MH\npS4ylMAv0jQzRg5sdgx0zK3waezTt65vJKRWIqB0aRMJEDj/MBIaFlAZ3+rT3c2n\nQF1H1gzmtZCdy59eGSNK8veXlK3tK9w+bx3FpcQM/jpCbcDIfAvR3fzwKJdAG9iB\nlJsi+ssZiwKBgFIOQF77oAUwnHcsbR468RIZepywBkUgB9rR/qnlDa2A8ysnU7NA\nHc77aMZuJ+KDBhFYDavGnfIsT8TmKaXTqXdfAsdvctF8eDEtRjvHyxm6wHfdObXh\nxzzX6bqj1fk7p7DBuX4ye0ok8saTyLq6fLkZwXQT3lMvL5jjKojwx5NdAoGAEfx9\nwhPX4tpAvoOCHXIVWD4aCUCupENkzOnf14qUIiPzgwqNPzhzBOMB/ZH62Pr9osSi\n0w6fBWY3zbbmsGz3S+HoE0BUIXkSKc1d7XaPENO3/JP4bX7eRECHY5I0fhY+iiuX\nftaPI25SiYXRWl7HVC63oCCUp41NXrFTtpRV0t0CgYAlBUIwWaVBxp8npHqOYF67\n0Ggg06km5WlwkOAU3PVIKzdPfpS34MZtv+u74891+nsc3JubSu4QK9gMqc6QNQRd\nwxkZ5fSrsRftCALnxgYakaoy1QYQ2h7S9VcEaFFPCFh1rDzmFpGD6Hq/Wr0pbwbQ\nf/UhnVnCNq45q2kgh0R5bg==\n-----END PRIVATE KEY-----\n",
+  "client_email": "tictactoegameaccount@tictactoegame-403900.iam.gserviceaccount.com",
+  "client_id": "107423857764318653330",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/tictactoegameaccount%40tictactoegame-403900.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
