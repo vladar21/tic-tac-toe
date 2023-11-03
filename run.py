@@ -203,25 +203,6 @@ def check_game_status(board):
     
     # If no win or draw, the game is not over
     return False, None
-    
-# def is_game_over(board):
-
-#     # Check for a win for each player
-#     for player in [1, -1]:
-#         if (
-#             any(all(cell == player for cell in row) for row in board) or  # Check rows for a win
-#             any(all(row[i] == player for row in board) for i in range(3)) or  # Check columns for a win
-#             all(board[i][i] == player for i in range(3)) or  # Check main diagonal for a win
-#             all(board[i][2 - i] == player for i in range(3))  # Check secondary diagonal for a win
-#         ):
-#             return True  # A win is detected
-
-#     # Check for a draw (all cells are filled)
-#     if all(cell != 0 for row in board for cell in row):
-#         return True  # The game is a draw
-
-#     # If no win or draw, the game is not over
-#     return False
 
 def display_board(board):
 
@@ -276,7 +257,12 @@ def main():
                     print("The game is a draw!")
                     result = "Draw"
                 update_leadersboard(leadersboard_data_sheet, nickname, result)
-                break
+                print("\nPlay again?")
+                play_or_no = str(input("(Y - if yes, any other - if no): "))
+                play_or_no = play_or_no.lower()
+                if play_or_no != 'y':
+                    display_leadersboard(leadersboard_data_sheet)
+                    break
             if current_player == 1:
                 move = int(input("Your move (0-8): "))
                 if board[move // 3][move % 3] == 0:
