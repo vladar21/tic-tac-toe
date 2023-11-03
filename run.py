@@ -105,7 +105,7 @@ def display_leadersboard(leadersboard_data_sheet):
     print("\nLeadersboard")
 
     # Headers for the table
-    headers = ["PP", "Human Nickname", "Win Human", "Win AI", "Draw"]  # Added "Draw" to headers
+    headers = ["PP", "Human Nickname", "Total Games", "Win Human", "Win AI", "Draw"]  # Added "Draw" to headers
 
     # If there are no data rows or only header row, print the headers and return
     if len(leadersboard_data) <= 1:
@@ -139,10 +139,10 @@ def update_leadersboard(leadersboard_data_sheet, nickname, result):
 
     # Find the indexes for the relevant columns
     nickname_index = headers.index("human_nickname") + 1  # +1 for Google Sheets indexing
+    total_index = headers.index("total_games") + 1
     win_index = headers.index("win_human") + 1
     lose_index = headers.index("win_ai") + 1
     draws_index = headers.index("draws") + 1
-    total_index = headers.index("total_games") + 1
 
     # Find the player in the leaderboard
     player_row = None
@@ -260,6 +260,7 @@ def main():
                 print("\nPlay again?")
                 play_or_no = str(input("(Y - if yes, any other - if no): "))
                 play_or_no = play_or_no.lower()
+                board = [[0, 0, 0] for _ in range(3)]
                 if play_or_no != 'y':
                     display_leadersboard(leadersboard_data_sheet)
                     break
