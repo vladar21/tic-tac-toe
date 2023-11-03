@@ -264,6 +264,8 @@ def main():
             current_player = 1 if current_player == -1 else -1
         if model is not None:
            model_directory = 'tic_tac_toe_model'
+           if not os.path.exists(model_directory):
+               os.makedirs(model_directory)  # This will create the directory if it doesn't exist
            model_file = os.path.join(model_directory, 'tic_tac_toe_model.keras')
            model.save(model_file)
     elif start == 'l':
