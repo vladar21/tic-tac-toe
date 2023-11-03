@@ -77,6 +77,7 @@ def display_start_game():
     print(" --------- ")
     print(f" {start_board[6]} | {start_board[7]} | {start_board[8]} ")
     
+
 def display_leadersboard(leadersboard_data_sheet):
     """
     Fetch and display the leaderboard from a Google Sheets document in a formatted table.
@@ -91,7 +92,7 @@ def display_leadersboard(leadersboard_data_sheet):
     print("\nLeadersboard")
 
     # Headers for the table
-    headers = ["PP", "Human Nickname", "Win Human", "Win AI"]
+    headers = ["PP", "Human Nickname", "Win Human", "Win AI", "Draw"]  # Added "Draw" to headers
 
     # If there are no data rows or only header row, print the headers and return
     if len(leadersboard_data) <= 1:
@@ -112,13 +113,57 @@ def display_leadersboard(leadersboard_data_sheet):
     print("-" * (sum(column_lengths) + 3 * (len(headers) - 1)))  # Print header separator
 
     # Print the formatted data rows, skipping the first row which is headers
-    for i in range(1, len(leadersboard_data)):  # Start with 1 to skip header row
-        # Get the row data, skipping the header
-        row = leadersboard_data[i]
-        
+    for i, row_data in enumerate(leadersboard_data[1:], start=1):  # Start with 1 to skip header row
         # If the row has less columns than headers, append empty strings
-        row += [""] * (len(headers) - len(row))
-        print(row_format.format(i, *row))
+        row_data += [""] * (len(headers) - len(row_data))
+        print(row_format.format(i, *row_data))  # Use row_data instead of row for clarity
+
+def update_leadersboard(leadersboard_data_sheet, nickname, result):
+    """
+    Update the leaderboard with the result of the current game.
+    
+    Args:
+    leadersboard_data_sheet: The Google Sheet worksheet containing the leaderboard data.
+    nickname: The unique nickname of the player.
+    result: A string indicating the game result, either 'Win', 'Lose', or 'Draw'.
+    """
+    # Fetching the current data from the sheet
+    leadersboard_data = leadersboard_data_sheet.get_all_values()
+    headers = leadersboard_data[0]  # Assuming the first row contains headers
+
+    # Find the indexes for the relevant columns
+    nickname_index = headers.index("Human Nickname") + 1  # +1 for Google Sheets indexing
+    win_index = headers.index("Win Human") + 1
+    lose_index = headers.index("Win AI") + 1
+    draw_index = headers.index("Draw") + 1
+
+    # Find the player in the leaderboard
+    player_row = None
+    for i, row in enumerate(leadersboard_data[1:], start=2):  # Start=2 to account for header row
+        if row[nickname_index - 1] == nickname:  # -1 to convert back from Google Sheets indexing
+            player_row = i
+            break
+
+    if player_row:
+        # Player exists, update their record
+        if result == 'Win':
+            cell = leadersboard_data_sheet.cell(player_row, win_index)
+            leadersboard_data_sheet.update_cell(player_row, win_index, int(cell.value) + 1)
+        elif result == 'Lose':
+            cell = leadersboard_data_sheet.cell(player_row, lose_index)
+            leadersboard_data_sheet.update_cell(player_row, lose_index, int(cell.value) + 1)
+        elif result == 'Draw':
+            cell = leadersboard_data_sheet.cell(player_row, draw_index)
+            leadersboard_data_sheet.update_cell(player_row, draw_index, int(cell.value) + 1)
+    else:
+        # Player doesn't exist, append a new row
+        new_row_values = [''] * len(headers)
+        new_row_values[nickname_index - 1] = nickname
+        new_row_values[win_index - 1] = 1 if result == 'Win' else 0
+        new_row_values[lose_index - 1] = 1 if result == 'Lose' else 0
+        new_row_values[draw_index - 1] = 1 if result == 'Draw' else 0
+        leadersboard_data_sheet.append_row(new_row_values)
+
 
 def is_game_over(board):
     """
@@ -207,6 +252,8 @@ def main():
     
     print("\nTic Tac Toe with Ai")
     print()
+    nickname = input("Please enter your nickname (it must be unique): ").strip()
+
     start = str(input("Do you want to play game, exit or look at the leadersboard? \n(Y - game, L - leadersboar, any other - exit): "))
     start = start.lower()
     # Main game loop
