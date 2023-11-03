@@ -138,10 +138,10 @@ def update_leadersboard(leadersboard_data_sheet, nickname, result):
     headers = leadersboard_data[0]  # Assuming the first row contains headers
 
     # Find the indexes for the relevant columns
-    nickname_index = headers.index("Human Nickname") + 1  # +1 for Google Sheets indexing
-    win_index = headers.index("Win Human") + 1
-    lose_index = headers.index("Win AI") + 1
-    draw_index = headers.index("Draw") + 1
+    nickname_index = headers.index("human_nickname") + 1  # +1 for Google Sheets indexing
+    win_index = headers.index("win_human") + 1
+    lose_index = headers.index("win_ai") + 1
+    draw_index = headers.index("draw") + 1
 
     # Find the player in the leaderboard
     player_row = None
@@ -175,24 +175,49 @@ def save_board_to_google_sheets(worksheet, board, move):
     data_to_insert = [[board_str, move]]
     worksheet.insert_rows(data_to_insert, 2)
 
-def is_game_over(board):
-
+def check_game_status(board):
     # Check for a win for each player
     for player in [1, -1]:
-        if (
-            any(all(cell == player for cell in row) for row in board) or  # Check rows for a win
-            any(all(row[i] == player for row in board) for i in range(3)) or  # Check columns for a win
-            all(board[i][i] == player for i in range(3)) or  # Check main diagonal for a win
-            all(board[i][2 - i] == player for i in range(3))  # Check secondary diagonal for a win
-        ):
-            return True  # A win is detected
+        winning_positions = [
+            # Horizontal
+            board[0], board[1], board[2],
+            # Vertical
+            [board[0][0], board[1][0], board[2][0]],
+            [board[0][1], board[1][1], board[2][1]],
+            [board[0][2], board[1][2], board[2][2]],
+            # Diagonals
+            [board[0][0], board[1][1], board[2][2]],
+            [board[0][2], board[1][1], board[2][0]]
+        ]
+        
+        if any(all(pos == player for pos in win_pos) for win_pos in winning_positions):
+            return True, player  # A win is detected and return the player who won
 
     # Check for a draw (all cells are filled)
     if all(cell != 0 for row in board for cell in row):
-        return True  # The game is a draw
-
+        return True, 0  # The game is a draw
+    
     # If no win or draw, the game is not over
-    return False
+    return False, None
+    
+# def is_game_over(board):
+
+#     # Check for a win for each player
+#     for player in [1, -1]:
+#         if (
+#             any(all(cell == player for cell in row) for row in board) or  # Check rows for a win
+#             any(all(row[i] == player for row in board) for i in range(3)) or  # Check columns for a win
+#             all(board[i][i] == player for i in range(3)) or  # Check main diagonal for a win
+#             all(board[i][2 - i] == player for i in range(3))  # Check secondary diagonal for a win
+#         ):
+#             return True  # A win is detected
+
+#     # Check for a draw (all cells are filled)
+#     if all(cell != 0 for row in board for cell in row):
+#         return True  # The game is a draw
+
+#     # If no win or draw, the game is not over
+#     return False
 
 def display_board(board):
 
@@ -235,9 +260,18 @@ def main():
         board = [[0, 0, 0] for _ in range(3)]  # Initialize the board.
         model = load_or_train_model(tic_tac_toe_data_sheet)
         while True:           
-            if is_game_over(board):
-                print("Game over.")
-                display_board(board)
+            game_over, winner = check_game_status(board)
+            if game_over:
+                if winner == 1:
+                    print("Player X wins!")
+                    result = "Win"
+                elif winner == -1:
+                    print("Player O wins!")
+                    result = "Lose"
+                elif winner == 0:
+                    print("The game is a draw!")
+                    result = "Draw"
+                update_leadersboard(leadersboard_data_sheet, nickname, result)
                 break
             if current_player == 1:
                 move = int(input("Your move (0-8): "))
