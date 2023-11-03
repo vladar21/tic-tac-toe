@@ -4,18 +4,61 @@
 import gspread
 from google.oauth2.service_account import Credentials
 
-SCOPE = [
-    "https://www.googleapis.com/auth/spreadsheets",
-    "https://www.googleapis.com/auth/drive.file",
-    "https://www.googleapis.com/auth/drive"
+import gspread
+from google.oauth2.service_account import Credentials
+
+def load_data_from_google_sheets():
+    """
+    Initialize the Google Sheets client, open the spreadsheet, and load data sheets.
+
+    This function uses the credentials file 'creds.json' to authorize access to Google Sheets
+    and opens a spreadsheet titled 'tic_tac_toe' to retrieve two specific worksheets within it.
+    It also initializes the game board with zeros, representing an empty board.
+
+    Returns:
+        tuple: A tuple containing the leaderboard worksheet, tic_tac_toe_data_sheet worksheet, and the initial board state.
+        Returns None for each if an exception occurs during the process.
+    """
+    # Define the scope of the access.
+    scope = [
+        "https://www.googleapis.com/auth/spreadsheets",
+        "https://www.googleapis.com/auth/drive.file",
+        "https://www.googleapis.com/auth/drive"
     ]
-CREDS = Credentials.from_service_account_file('creds.json')
-SCOPED_CREDS = CREDS.with_scopes(SCOPE)
-GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
-SHEET = GSPREAD_CLIENT.open('tic_tac_toe')
-leadersboard_data_sheet = SHEET.worksheet('leadersboard')
-tic_tac_toe_data_sheet = SHEET.worksheet('tic_tac_toe_data_sheet')
-board = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
+
+    # Load the credentials from the 'creds.json' file.
+    try:
+        creds = Credentials.from_service_account_file('creds.json', scopes=scope)
+    except FileNotFoundError:
+        print("Credentials file 'creds.json' not found.")
+        return None, None, None
+    except Exception as e:
+        print(f"An error occurred while loading credentials: {e}")
+        return None, None, None
+
+    # Authorize the credentials and create a client using gspread.
+    client = gspread.authorize(creds)
+
+    # Try to open the spreadsheet and the worksheets within it.
+    try:
+        sheet = client.open('tic_tac_toe')
+        leadersboard_data_sheet = sheet.worksheet('leadersboard')
+        tic_tac_toe_data_sheet = sheet.worksheet('tic_tac_toe_data_sheet')
+    except gspread.exceptions.SpreadsheetNotFound:
+        print("The spreadsheet 'tic_tac_toe' was not found.")
+        return None, None, None
+    except gspread.exceptions.WorksheetNotFound:
+        print("A required worksheet was not found in the spreadsheet.")
+        return None, None, None
+    except Exception as e:
+        print(f"An error occurred while opening the spreadsheet: {e}")
+        return None, None, None
+
+    # Initialize the board.
+    board = [[0, 0, 0] for _ in range(3)]
+
+    return leadersboard_data_sheet, tic_tac_toe_data_sheet, board
+
 
 # Start board
 def display_start_game():
@@ -124,6 +167,13 @@ def display_board(board):
     print()  # Print a newline at the end for better formatting
 
 def main():
+    # Load data from Google Sheets at the start of the main function
+    leadersboard_data_sheet, tic_tac_toe_data_sheet, board = load_data_from_google_sheets()
+
+    if not leadersboard_data_sheet or not tic_tac_toe_data_sheet:
+        print("Error loading data from Google Sheets.")
+        return  # Exit the function if data loading was unsuccessful
+
     # Main game loop
     
     print("\nTic Tac Toe with Ai")
@@ -147,4 +197,6 @@ def main():
     else:
         print("\nGame over.\n")
         
-main()
+# Ensure that the main function is called when the script is executed
+if __name__ == "__main__":
+    main()
