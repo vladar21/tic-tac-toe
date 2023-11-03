@@ -13,7 +13,7 @@ CREDS = Credentials.from_service_account_file('creds.json')
 SCOPED_CREDS = CREDS.with_scopes(SCOPE)
 GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open('tic_tac_toe')
-leadersboard_sheet = SHEET.worksheet('leadersboard')
+leadersboard_data_sheet = SHEET.worksheet('leadersboard')
 tic_tac_toe_data_sheet = SHEET.worksheet('tic_tac_toe_data_sheet')
 
 # Start board
@@ -29,36 +29,87 @@ def display_start_game():
     print(" --------- ")
     print(f" {start_board[6]} | {start_board[7]} | {start_board[8]} ")
 
-def display_leadersboard():
-    print("Leadersboard")
-
-def update_leadersboard(leadersboard_sheet, human_nickname, win_human, win_ai):
+def display_leadersboard(leadersboard_data_sheet):
     """
-    Update leadersboard data on the Google Sheet
+    Fetch and display the leaderboard from a Google Sheets document in a formatted table.
+
+    Parameters:
+    leadersboard_data_sheet: A worksheet object containing the leaderboard data, where each row contains 
+                             the details of a leader. The details include human nickname, number of wins by the human,
+                             and number of wins by the AI.
     """
-    leaderboard_old_data = leadersboard_sheet.get_all_values()
+    # Fetching the data from the sheet
+    leadersboard_data = leadersboard_data_sheet.get_all_values()
+    
+    print("\nLeadersboard")
 
-    # Find the row index for the given human_nickname, if it exists
-    row_index = None
-    for i, row in enumerate(leaderboard_old_data):
-        if row[0] == human_nickname:
-            row_index = i
-            break
+    # Headers for the table
+    headers = ["PP", "Human Nickname", "Win Human", "Win AI"]
 
-    # If the human_nickname exists, update the row; otherwise, add a new row
-    if row_index is not None:
-        # Update win_human, win_ai, and total_games
-        win_human = int(row[2]) + win_human
-        win_ai = int(row[3]) + win_ai
-        total_games = int(row[1]) + 1
+    # Find the maximum length of data in each column for proper spacing
+    column_lengths = [len(header) for header in headers]
+    for row in leadersboard_data:
+        for i, cell in enumerate(row):
+            column_lengths[i] = max(column_lengths[i], len(cell))
 
-        leadersboard_sheet.update(f'C{row_index+2}', [[win_human]])
-        leadersboard_sheet.update(f'D{row_index+2}', [[win_ai]])
-        leadersboard_sheet.update(f'B{row_index+2}', [[total_games]])
-    else:
-        # Create a new row with the given values
-        new_row = [human_nickname, 1, win_human, win_ai]
-        leadersboard_sheet.append_row(new_row)
+    # Adding 'PP' column which is not in the Google Sheet
+    leadersboard_data.insert(0, headers)
+    column_lengths.insert(0, len(headers[0]))  # Assuming 'PP' length is less than header 'PP'
+
+    # Creating the format string for each row
+    row_format = " | ".join(["{:<" + str(length) + "}" for length in column_lengths])
+
+    # Print the formatted header row
+    print(row_format.format(*leadersboard_data[0]))
+    print("-" * (sum(column_lengths) + 3 * (len(headers) - 1)))  # Print header separator
+
+    # Print the formatted data rows
+    for index, row in enumerate(leadersboard_data[1:], start=1):  # We skip the header row which is now the first item in the list
+        print(row_format.format(index, *row))
+    
+def display_leadersboard(leadersboard_data_sheet):
+    """
+    Fetch and display the leaderboard from a Google Sheets document in a formatted table.
+
+    Parameters:
+    leadersboard_data_sheet: A worksheet object containing the leaderboard data, where each row contains 
+                             the details of a leader, excluding the first row which contains column headers.
+    """
+    # Fetching the data from the sheet
+    leadersboard_data = leadersboard_data_sheet.get_all_values()
+    
+    print("\nLeadersboard")
+
+    # Headers for the table
+    headers = ["PP", "Human Nickname", "Win Human", "Win AI"]
+
+    # If there are no data rows or only header row, print the headers and return
+    if len(leadersboard_data) <= 1:
+        print(" | ".join(headers))
+        return
+
+    # Determine the maximum width for each column
+    column_lengths = [len(header) for header in headers]
+    for row in leadersboard_data[1:]:  # Skip the header row in the data
+        for i in range(len(row)):
+            column_lengths[i] = max(column_lengths[i], len(row[i]))
+
+    # Create a format string for each row with appropriate spacing
+    row_format = " | ".join(["{:<" + str(length) + "}" for length in column_lengths])
+
+    # Print the formatted header row
+    print(row_format.format(*headers))
+    print("-" * (sum(column_lengths) + 3 * (len(headers) - 1)))  # Print header separator
+
+    # Print the formatted data rows, skipping the first row which is headers
+    for i in range(1, len(leadersboard_data)):  # Start with 1 to skip header row
+        # Get the row data, skipping the header
+        row = leadersboard_data[i]
+        
+        # If the row has less columns than headers, append empty strings
+        row += [""] * (len(headers) - len(row))
+        print(row_format.format(i, *row))
+
 
 def main():
     # Main game loop
@@ -74,7 +125,7 @@ def main():
             display_start_game()
             break
     elif start == 'l':
-        display_leadersboard()
+        display_leadersboard(leadersboard_data_sheet)
     else:
         print("\nGame over.\n")
         
