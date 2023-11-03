@@ -142,6 +142,7 @@ def update_leadersboard(leadersboard_data_sheet, nickname, result):
     win_index = headers.index("win_human") + 1
     lose_index = headers.index("win_ai") + 1
     draw_index = headers.index("draw") + 1
+    total_index = headers.index("total_games") + 1
 
     # Find the player in the leaderboard
     player_row = None
@@ -152,6 +153,8 @@ def update_leadersboard(leadersboard_data_sheet, nickname, result):
 
     if player_row:
         # Player exists, update their record
+        cell = leadersboard_data_sheet.cell(player_row, total_index)
+        leadersboard_data_sheet.update_cell(player_row, total_index, int(cell.value) + 1)
         if result == 'Win':
             cell = leadersboard_data_sheet.cell(player_row, win_index)
             leadersboard_data_sheet.update_cell(player_row, win_index, int(cell.value) + 1)
