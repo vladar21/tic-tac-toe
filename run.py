@@ -29,12 +29,13 @@ def load_or_train_model(worksheet):
     
     if os.path.exists(model_file):
         model = keras.models.load_model(model_file)
+        return model  # Ensure the model is returned
     else:
         data = worksheet.get_all_values()
 
         if not data:
             print("The worksheet is empty. Starting with empty data.")
-            return [], []
+            return None  # Explicitly return None
 
         X_train = []
         y_train = []
@@ -58,10 +59,10 @@ def load_or_train_model(worksheet):
             model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 
             model.fit(X_train, y_train, epochs=50)
+            return model
         else:
             print("No training data available. Starting with an untrained model.")
-            model = None
-    return model
+            return None
 
 def load_data_from_google_sheets():
 
