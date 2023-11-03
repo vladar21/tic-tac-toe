@@ -141,11 +141,25 @@ def is_game_over(board):
     return False
 
 def display_board(board):
-    print()
-    for row in board:
+    """
+    Print the Tic-Tac-Toe board to the console.
+
+    Args:
+    board (list of list of int): The game board, a 3x3 list.
+                                  Each cell contains 0 (empty), 1 (player 1's 'X'), or -1 (player 2's 'O').
+    """
+    # Get the total number of rows
+    num_rows = len(board)
+
+    # Iterate over each row in the board
+    for i, row in enumerate(board):
+        # Print the row with 'X', 'O', or ' ' depending on the cell value
         print(" | ".join(["X" if cell == 1 else "O" if cell == -1 else " " for cell in row]))
-        print("-" * 9)
-    print()
+        
+        # Print a horizontal line to separate the rows, except for the last row
+        if i < num_rows - 1:
+            print("-" * 9)
+    print()  # Print a newline at the end for better formatting
 
 def main():
     # Main game loop
