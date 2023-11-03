@@ -4,6 +4,9 @@
 
 import gspread
 from google.oauth2.service_account import Credentials
+import os
+import tensorflow as tf
+from tensorflow import keras
 
 def load_data_from_google_sheets():
     """
@@ -164,6 +167,29 @@ def display_board(board):
             print("-" * 9)
     print()  # Print a newline at the end for better formatting
 
+def work_with_model():
+    if os.path.exists(model_file):
+        model = keras.models.load_model(model_file)
+    else:
+        X_train, y_train = load_data_from_google_sheets()
+
+        if len(X_train) > 0:
+            model = keras.Sequential([
+                keras.layers.Input(shape=(9,)),
+                keras.layers.Dense(128, activation='relu'),
+                keras.layers.Dense(9, activation='softmax')
+            ])
+
+            model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+
+            model.fit(X_train, y_train, epochs=50)
+        else:
+            print("No training data available. Starting with an untrained model.")
+            X_train = []
+            y_train = []
+            model = None
+    return model
+
 def main():
     # Load data from Google Sheets at the start of the main function
     leadersboard_data_sheet, tic_tac_toe_data_sheet, board = load_data_from_google_sheets()
@@ -185,11 +211,33 @@ def main():
         current_player = 1
         X_train = []
         y_train = []
+        model = work_with_model()
         while True:           
             if is_game_over(board):
                 print("Game over.")
                 display_board(board)
                 break
+            if current_player == 1:
+                move = int(input("Your move (0-8): "))
+                if board[move // 3][move % 3] == 0:
+                    board[move // 3][move % 3] = 1
+                    flattened_board = [cell for row in board for cell in row]
+                    X_train.append(flattened_board)
+                    y_train.append(move)
+            else:
+                if model is not None:
+                    flattened_board = [cell for row in board for cell in row]
+                    board_as_input = [flattened_board]
+                    prediction = model.predict(board_as_input)[0]
+                    valid_moves = [i for i in range(9) if board[i // 3][i % 3] == 0]
+                    best_move = max(valid_moves, key=lambda i: prediction[i])
+                    board[best_move // 3][best_move % 3] = -1
+                    flattened_board = [cell for row in board for cell in row]
+                    X_train.append(flattened_board)
+            display_board(board)
+            current_player = 1 if current_player == -1 else -1
+        if model is not None:
+           model.save(model_file)
     elif start == 'l':
         display_leadersboard(leadersboard_data_sheet)
     else:
