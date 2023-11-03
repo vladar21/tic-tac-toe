@@ -8,6 +8,9 @@ import os
 import tensorflow as tf
 from tensorflow import keras
 
+tf.data.experimental.enable_debug_mode()
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+
 def load_data_from_google_sheets():
     """
     Initialize the Google Sheets client, open the spreadsheet, and load data sheets.
@@ -168,6 +171,8 @@ def display_board(board):
     print()  # Print a newline at the end for better formatting
 
 def work_with_model():
+    model_directory = 'tic_tac_toe_model'
+    model_file = os.path.join(model_directory, 'tic_tac_toe_model.keras')
     if os.path.exists(model_file):
         model = keras.models.load_model(model_file)
     else:
