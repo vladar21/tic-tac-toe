@@ -141,7 +141,7 @@ def update_leadersboard(leadersboard_data_sheet, nickname, result):
     nickname_index = headers.index("human_nickname") + 1  # +1 for Google Sheets indexing
     win_index = headers.index("win_human") + 1
     lose_index = headers.index("win_ai") + 1
-    draw_index = headers.index("draw") + 1
+    draws_index = headers.index("draws") + 1
     total_index = headers.index("total_games") + 1
 
     # Find the player in the leaderboard
@@ -162,8 +162,8 @@ def update_leadersboard(leadersboard_data_sheet, nickname, result):
             cell = leadersboard_data_sheet.cell(player_row, lose_index)
             leadersboard_data_sheet.update_cell(player_row, lose_index, int(cell.value) + 1)
         elif result == 'Draw':
-            cell = leadersboard_data_sheet.cell(player_row, draw_index)
-            leadersboard_data_sheet.update_cell(player_row, draw_index, int(cell.value) + 1)
+            cell = leadersboard_data_sheet.cell(player_row, draws_index)
+            leadersboard_data_sheet.update_cell(player_row, draws_index, int(cell.value) + 1)
     else:
         # Player doesn't exist, append a new row
         new_row_values = [''] * len(headers)
@@ -171,7 +171,7 @@ def update_leadersboard(leadersboard_data_sheet, nickname, result):
         new_row_values[total_index - 1] = 1
         new_row_values[win_index - 1] = 1 if result == 'Win' else 0
         new_row_values[lose_index - 1] = 1 if result == 'Lose' else 0
-        new_row_values[draw_index - 1] = 1 if result == 'Draw' else 0
+        new_row_values[draws_index - 1] = 1 if result == 'Draw' else 0
         leadersboard_data_sheet.append_row(new_row_values)
 
 def save_board_to_google_sheets(worksheet, board, move):
