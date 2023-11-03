@@ -1,23 +1,15 @@
-# Your code goes here.
-# You can delete these comments, but do not change the name of this file
-# Write your code to expect a terminal of 80 characters wide and 24 rows high
-
 import gspread
 from google.oauth2.service_account import Credentials
 import os
 import tensorflow as tf
 from tensorflow import keras
+from funcs import display_start_game
 
 tf.data.experimental.enable_debug_mode()
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 def check_model_availability():
-    """
-    Check if the TensorFlow model is available and can be loaded correctly.
-    
-    Returns:
-        bool: True if the model is available and loads without errors, False otherwise.
-    """
+
     model_directory = 'tic_tac_toe_model'
     model_file = os.path.join(model_directory, 'saved_model.pb')  # Assuming saved_model.pb is the model file
     if not os.path.exists(model_file):
@@ -31,18 +23,48 @@ def check_model_availability():
         return False
     return True
 
+def load_or_train_model(worksheet):
+    model_directory = 'tic_tac_toe_model'
+    model_file = os.path.join(model_directory, 'tic_tac_toe_model.h5')
+    
+    if os.path.exists(model_file):
+        model = keras.models.load_model(model_file)
+    else:
+        data = worksheet.get_all_values()
+
+        if not data:
+            print("The worksheet is empty. Starting with empty data.")
+            return [], []
+
+        X_train = []
+        y_train = []
+
+        for row in data:
+            if len(row) < 2 or not row[0]:
+                continue
+
+            board_state = [1 if cell == 'X' else -1 if cell == 'O' else 0 for cell in row[0]]
+            X_train.append(board_state)
+            move = int(row[1])
+            y_train.append(move)
+
+        if len(X_train) > 0:
+            model = keras.Sequential([
+                keras.layers.Input(shape=(9,)),
+                keras.layers.Dense(128, activation='relu'),
+                keras.layers.Dense(9, activation='softmax')
+            ])
+
+            model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+
+            model.fit(X_train, y_train, epochs=50)
+        else:
+            print("No training data available. Starting with an untrained model.")
+            model = None
+    return model
+
 def load_data_from_google_sheets():
-    """
-    Initialize the Google Sheets client, open the spreadsheet, and load data sheets.
 
-    This function uses the credentials file 'creds.json' to authorize access to Google Sheets
-    and opens a spreadsheet titled 'tic_tac_toe' to retrieve two specific worksheets within it.
-    It also initializes the game board with zeros, representing an empty board.
-
-    Returns:
-        tuple: A tuple containing the leaderboard worksheet, tic_tac_toe_data_sheet worksheet, and the initial board state.
-        Returns None for each if an exception occurs during the process.
-    """
     # Define the scope of the access.
     scope = [
         "https://www.googleapis.com/auth/spreadsheets",
@@ -87,34 +109,10 @@ def load_data_from_google_sheets():
         print(f"An error occurred while opening the spreadsheet: {e}")
         return None, None, None
 
-    # Initialize the board.
-    board = [[0, 0, 0] for _ in range(3)]
-
-    return leadersboard_data_sheet, tic_tac_toe_data_sheet, board
-
-
-# Start board
-def display_start_game():
-    print('Game rules:')
-    print("Your turn will have symbol 'X', the AI turn - symbol 'O'.")
-    print("The winner must have three of their symbols in a line, vertically or horizontally.")
-    print("\nGameplay field: ")
-    start_board = ['0', '1', '2', '3', '4', '5', '6', '7', '8']
-    print(f"\n {start_board[0]} | {start_board[1]} | {start_board[2]} ")
-    print(" --------- ")
-    print(f" {start_board[3]} | {start_board[4]} | {start_board[5]} ")
-    print(" --------- ")
-    print(f" {start_board[6]} | {start_board[7]} | {start_board[8]} ")
+    return leadersboard_data_sheet, tic_tac_toe_data_sheet
     
-
 def display_leadersboard(leadersboard_data_sheet):
-    """
-    Fetch and display the leaderboard from a Google Sheets document in a formatted table.
 
-    Parameters:
-    leadersboard_data_sheet: A worksheet object containing the leaderboard data, where each row contains 
-                             the details of a leader, excluding the first row which contains column headers.
-    """
     # Fetching the data from the sheet
     leadersboard_data = leadersboard_data_sheet.get_all_values()
     
@@ -148,14 +146,7 @@ def display_leadersboard(leadersboard_data_sheet):
         print(row_format.format(i, *row_data))  # Use row_data instead of row for clarity
 
 def update_leadersboard(leadersboard_data_sheet, nickname, result):
-    """
-    Update the leaderboard with the result of the current game.
-    
-    Args:
-    leadersboard_data_sheet: The Google Sheet worksheet containing the leaderboard data.
-    nickname: The unique nickname of the player.
-    result: A string indicating the game result, either 'Win', 'Lose', or 'Draw'.
-    """
+
     # Fetching the current data from the sheet
     leadersboard_data = leadersboard_data_sheet.get_all_values()
     headers = leadersboard_data[0]  # Assuming the first row contains headers
@@ -193,19 +184,13 @@ def update_leadersboard(leadersboard_data_sheet, nickname, result):
         new_row_values[draw_index - 1] = 1 if result == 'Draw' else 0
         leadersboard_data_sheet.append_row(new_row_values)
 
+def save_board_to_google_sheets(worksheet, board, move):
+    board_str = "".join(["X" if cell == 1 else "O" if cell == -1 else " " for row in board for cell in row])
+    data_to_insert = [[board_str, move]]
+    worksheet.insert_rows(data_to_insert, 2)
 
 def is_game_over(board):
-    """
-    Check if the Tic-Tac-Toe game is over.
-    The game is over if there is a winner or if all cells are filled (a draw).
 
-    Args:
-    board (list of list of int): The game board represented by a 3x3 list.
-    Each cell contains 0 (empty), 1 (player 1), or -1 (player 2).
-
-    Returns:
-    bool: True if the game is over, False otherwise.
-    """
     # Check for a win for each player
     for player in [1, -1]:
         if (
@@ -224,13 +209,7 @@ def is_game_over(board):
     return False
 
 def display_board(board):
-    """
-    Print the Tic-Tac-Toe board to the console.
 
-    Args:
-    board (list of list of int): The game board, a 3x3 list.
-                                  Each cell contains 0 (empty), 1 (player 1's 'X'), or -1 (player 2's 'O').
-    """
     # Get the total number of rows
     num_rows = len(board)
 
@@ -244,34 +223,11 @@ def display_board(board):
             print("-" * 9)
     print()  # Print a newline at the end for better formatting
 
-def work_with_model():
-    model_directory = 'tic_tac_toe_model'
-    model_file = os.path.join(model_directory, 'tic_tac_toe_model.keras')
-    if os.path.exists(model_file):
-        model = keras.models.load_model(model_file)
-    else:
-        X_train, y_train = load_data_from_google_sheets()
-
-        if len(X_train) > 0:
-            model = keras.Sequential([
-                keras.layers.Input(shape=(9,)),
-                keras.layers.Dense(128, activation='relu'),
-                keras.layers.Dense(9, activation='softmax')
-            ])
-
-            model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
-
-            model.fit(X_train, y_train, epochs=50)
-        else:
-            print("No training data available. Starting with an untrained model.")
-            X_train = []
-            y_train = []
-            model = None
-    return model
-
 def main():
+    check_model_availability()
+
     # Load data from Google Sheets at the start of the main function
-    leadersboard_data_sheet, tic_tac_toe_data_sheet, board = load_data_from_google_sheets()
+    leadersboard_data_sheet, tic_tac_toe_data_sheet = load_data_from_google_sheets()
 
     if not leadersboard_data_sheet or not tic_tac_toe_data_sheet:
         print("Error loading data from Google Sheets.")
@@ -292,7 +248,8 @@ def main():
         current_player = 1
         X_train = []
         y_train = []
-        model = work_with_model()
+        board = [[0, 0, 0] for _ in range(3)]  # Initialize the board.
+        model = load_or_train_model(tic_tac_toe_data_sheet)
         while True:           
             if is_game_over(board):
                 print("Game over.")
@@ -305,6 +262,8 @@ def main():
                     flattened_board = [cell for row in board for cell in row]
                     X_train.append(flattened_board)
                     y_train.append(move)
+                    # Save the current board state to Google Sheets
+                    save_board_to_google_sheets(tic_tac_toe_data_sheet, board, move)
             else:
                 if model is not None:
                     flattened_board = [cell for row in board for cell in row]
@@ -315,9 +274,13 @@ def main():
                     board[best_move // 3][best_move % 3] = -1
                     flattened_board = [cell for row in board for cell in row]
                     X_train.append(flattened_board)
+                    # Save the current board state to Google Sheets
+                    save_board_to_google_sheets(tic_tac_toe_data_sheet, board, best_move)
             display_board(board)
             current_player = 1 if current_player == -1 else -1
         if model is not None:
+           model_directory = 'tic_tac_toe_model'
+           model_file = os.path.join(model_directory, 'tic_tac_toe_model.keras')
            model.save(model_file)
     elif start == 'l':
         display_leadersboard(leadersboard_data_sheet)
