@@ -5,7 +5,7 @@ import tensorflow as tf
 from tensorflow import keras
 from funcs import display_start_game
 
-tf.data.experimental.enable_debug_mode()
+# tf.data.experimental.enable_debug_mode()
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 def load_or_train_model(worksheet):
@@ -43,7 +43,7 @@ def load_or_train_model(worksheet):
 
             model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 
-            model.fit(X_train, y_train, epochs=50)
+            model.fit(X_train, y_train, epochs=50, verbose=0)
             return model
         else:
             print("No training data available. Starting with an untrained model.")
