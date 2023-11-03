@@ -8,21 +8,6 @@ from funcs import display_start_game
 tf.data.experimental.enable_debug_mode()
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
-def check_model_availability():
-
-    model_directory = 'tic_tac_toe_model'
-    model_file = os.path.join(model_directory, 'saved_model.pb')  # Assuming saved_model.pb is the model file
-    if not os.path.exists(model_file):
-        print("Model file 'saved_model.pb' does not exist.")
-        return False
-    try:
-        # Attempt to load the model to ensure it's not only present but also loadable
-        keras.models.load_model(model_directory)  # In TensorFlow 2.x, you load the whole directory
-    except Exception as e:
-        print(f"An error occurred while loading the model: {e}")
-        return False
-    return True
-
 def load_or_train_model(worksheet):
     model_directory = 'tic_tac_toe_model'
     model_file = os.path.join(model_directory, 'tic_tac_toe_model.h5')
@@ -225,8 +210,6 @@ def display_board(board):
     print()  # Print a newline at the end for better formatting
 
 def main():
-    check_model_availability()
-
     # Load data from Google Sheets at the start of the main function
     leadersboard_data_sheet, tic_tac_toe_data_sheet = load_data_from_google_sheets()
 
