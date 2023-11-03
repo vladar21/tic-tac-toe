@@ -11,6 +11,26 @@ from tensorflow import keras
 tf.data.experimental.enable_debug_mode()
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
+def check_model_availability():
+    """
+    Check if the TensorFlow model is available and can be loaded correctly.
+    
+    Returns:
+        bool: True if the model is available and loads without errors, False otherwise.
+    """
+    model_directory = 'tic_tac_toe_model'
+    model_file = os.path.join(model_directory, 'saved_model.pb')  # Assuming saved_model.pb is the model file
+    if not os.path.exists(model_file):
+        print("Model file 'saved_model.pb' does not exist.")
+        return False
+    try:
+        # Attempt to load the model to ensure it's not only present but also loadable
+        keras.models.load_model(model_directory)  # In TensorFlow 2.x, you load the whole directory
+    except Exception as e:
+        print(f"An error occurred while loading the model: {e}")
+        return False
+    return True
+
 def load_data_from_google_sheets():
     """
     Initialize the Google Sheets client, open the spreadsheet, and load data sheets.
@@ -29,6 +49,15 @@ def load_data_from_google_sheets():
         "https://www.googleapis.com/auth/drive.file",
         "https://www.googleapis.com/auth/drive"
     ]
+
+    # Checking file availability creds.json
+    creds_file = 'creds.json'
+    if not os.path.exists(creds_file):
+        print("Credentials file 'creds.json' not found.")
+        return None, None, None
+    if not os.access(creds_file, os.R_OK):
+        print("Credentials file 'creds.json' is not readable.")
+        return None, None, None
 
     # Load the credentials from the 'creds.json' file.
     try:
