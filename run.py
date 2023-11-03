@@ -29,44 +29,6 @@ def display_start_game():
     print(f" {start_board[3]} | {start_board[4]} | {start_board[5]} ")
     print(" --------- ")
     print(f" {start_board[6]} | {start_board[7]} | {start_board[8]} ")
-
-def display_leadersboard(leadersboard_data_sheet):
-    """
-    Fetch and display the leaderboard from a Google Sheets document in a formatted table.
-
-    Parameters:
-    leadersboard_data_sheet: A worksheet object containing the leaderboard data, where each row contains 
-                             the details of a leader. The details include human nickname, number of wins by the human,
-                             and number of wins by the AI.
-    """
-    # Fetching the data from the sheet
-    leadersboard_data = leadersboard_data_sheet.get_all_values()
-    
-    print("\nLeadersboard")
-
-    # Headers for the table
-    headers = ["PP", "Human Nickname", "Win Human", "Win AI"]
-
-    # Find the maximum length of data in each column for proper spacing
-    column_lengths = [len(header) for header in headers]
-    for row in leadersboard_data:
-        for i, cell in enumerate(row):
-            column_lengths[i] = max(column_lengths[i], len(cell))
-
-    # Adding 'PP' column which is not in the Google Sheet
-    leadersboard_data.insert(0, headers)
-    column_lengths.insert(0, len(headers[0]))  # Assuming 'PP' length is less than header 'PP'
-
-    # Creating the format string for each row
-    row_format = " | ".join(["{:<" + str(length) + "}" for length in column_lengths])
-
-    # Print the formatted header row
-    print(row_format.format(*leadersboard_data[0]))
-    print("-" * (sum(column_lengths) + 3 * (len(headers) - 1)))  # Print header separator
-
-    # Print the formatted data rows
-    for index, row in enumerate(leadersboard_data[1:], start=1):  # We skip the header row which is now the first item in the list
-        print(row_format.format(index, *row))
     
 def display_leadersboard(leadersboard_data_sheet):
     """
