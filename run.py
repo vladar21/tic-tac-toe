@@ -168,6 +168,7 @@ def update_leadersboard(leadersboard_data_sheet, nickname, result):
         # Player doesn't exist, append a new row
         new_row_values = [''] * len(headers)
         new_row_values[nickname_index - 1] = nickname
+        new_row_values[total_index - 1] = 1
         new_row_values[win_index - 1] = 1 if result == 'Win' else 0
         new_row_values[lose_index - 1] = 1 if result == 'Lose' else 0
         new_row_values[draw_index - 1] = 1 if result == 'Draw' else 0
