@@ -15,6 +15,7 @@ GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open('tic_tac_toe')
 leadersboard_data_sheet = SHEET.worksheet('leadersboard')
 tic_tac_toe_data_sheet = SHEET.worksheet('tic_tac_toe_data_sheet')
+board = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
 
 # Start board
 def display_start_game():
@@ -110,10 +111,45 @@ def display_leadersboard(leadersboard_data_sheet):
         row += [""] * (len(headers) - len(row))
         print(row_format.format(i, *row))
 
+def is_game_over(board):
+    """
+    Check if the Tic-Tac-Toe game is over.
+    The game is over if there is a winner or if all cells are filled (a draw).
+
+    Args:
+    board (list of list of int): The game board represented by a 3x3 list.
+    Each cell contains 0 (empty), 1 (player 1), or -1 (player 2).
+
+    Returns:
+    bool: True if the game is over, False otherwise.
+    """
+    # Check for a win for each player
+    for player in [1, -1]:
+        if (
+            any(all(cell == player for cell in row) for row in board) or  # Check rows for a win
+            any(all(row[i] == player for row in board) for i in range(3)) or  # Check columns for a win
+            all(board[i][i] == player for i in range(3)) or  # Check main diagonal for a win
+            all(board[i][2 - i] == player for i in range(3))  # Check secondary diagonal for a win
+        ):
+            return True  # A win is detected
+
+    # Check for a draw (all cells are filled)
+    if all(cell != 0 for row in board for cell in row):
+        return True  # The game is a draw
+
+    # If no win or draw, the game is not over
+    return False
+
+def display_board(board):
+    print()
+    for row in board:
+        print(" | ".join(["X" if cell == 1 else "O" if cell == -1 else " " for cell in row]))
+        print("-" * 9)
+    print()
 
 def main():
     # Main game loop
-    current_player = 1
+    
     print("\nTic Tac Toe with Ai")
     print()
     start = str(input("Do you want to play game, exit or look at the leadersboard? \n(Y - game, L - leadersboar, any other - exit): "))
@@ -121,9 +157,15 @@ def main():
     # Main game loop
     if start == 'y':
         print('\nGame starting.\n')
-        while True:  
-            display_start_game()
-            break
+        display_start_game()
+        current_player = 1
+        X_train = []
+        y_train = []
+        while True:           
+            if is_game_over(board):
+                print("Game over.")
+                display_board(board)
+                break
     elif start == 'l':
         display_leadersboard(leadersboard_data_sheet)
     else:
