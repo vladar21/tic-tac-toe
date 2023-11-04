@@ -8,5 +8,4 @@ node_modules/
 .github/
 
 creds.json
-tic_tac_toe_model.h5
-tic_tac_toe_model.keras
+tic_tac_toe_model
