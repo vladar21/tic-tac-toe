@@ -1,13 +1,50 @@
+# Google Sheet
 import gspread
 from google.oauth2.service_account import Credentials
+# work with filesystem
 import os
+# AI model
 import tensorflow as tf
 from tensorflow import keras
+# my library
 from funcs import display_start_game
+# Google Drive
+from googleapiclient.discovery import build
+from googleapiclient.http import MediaFileUpload
 
 # tf.data.experimental.enable_debug_mode()
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
+SERVICE_ACCOUNT_FILE = 'creds.json'
+SCOPES = [
+    'https://www.googleapis.com/auth/drive',
+    "https://www.googleapis.com/auth/spreadsheets",
+    "https://www.googleapis.com/auth/drive.file"
+]
+
+CREDENTIALS = Credentials.from_service_account_file(
+    SERVICE_ACCOUNT_FILE,
+    scopes=SCOPES
+)
+
+service = build('drive', 'v3', credentials=CREDENTIALS)
+
+def save_model_to_google_drive(service, model_directory, model_name):
+    file_metadata = {
+        'name': model_name,
+        'mimeType': 'application/octet-stream'
+    }
+    
+    media = MediaFileUpload(os.path.join(model_directory, model_name),
+                            mimetype='application/octet-stream',
+                            resumable=True)
+    
+    file = service.files().create(body=file_metadata,
+                                  media_body=media,
+                                  fields='id').execute()
+    
+    print(f"Model saved to Drive with file ID: {file.get('id')}")
+    
 def load_or_train_model(worksheet):
     model_directory = 'tic_tac_toe_model'
     model_file = os.path.join(model_directory, 'tic_tac_toe_model.h5')
