@@ -10,6 +10,9 @@ from tensorflow import keras
 from funcs import display_start_game
 # Google Drive
 from googleapiclient.discovery import build
+import io
+from googleapiclient.http import MediaIoBaseUpload
+import h5py
 from googleapiclient.http import MediaFileUpload
 
 # tf.data.experimental.enable_debug_mode()
@@ -27,23 +30,69 @@ CREDENTIALS = Credentials.from_service_account_file(
     scopes=SCOPES
 )
 
-service = build('drive', 'v3', credentials=CREDENTIALS)
+SERVICE = build('drive', 'v3', credentials=CREDENTIALS)
+MODEL_NAME = "tic_tac_toe_model.h5"
 
-def save_model_to_google_drive(service, model_directory, model_name):
+
+def share_file_with_user(service, file_id, user_email):
+    user_permission = {
+        'type': 'user',
+        'role': 'writer',
+        'emailAddress': user_email
+    }
+    service.permissions().create(
+        fileId=file_id,
+        body=user_permission,
+        fields='id',
+    ).execute()
+
+
+def save_model_to_google_drive(service, model, model_name):
+
+    results = service.files().list(
+        q="'1MgctFDUGBgx2E-ZZac9V71MFAKj-cTqD' in parents",
+        pageSize=10,
+        fields="nextPageToken, files(id, name)").execute()
+    items = results.get('files', [])
+
+    if not items:
+        print('No files found.')
+    else:
+        print('Files:')
+        for item in items:
+            print(u'{0} ({1})'.format(item['name'], item['id']))
+
+
+    # Сериализация Keras модели в формате h5 в память
+    model_buffer = io.BytesIO()
+    
+    # Сохраняем модель в формате HDF5 в буфер
+    with h5py.File(model_buffer, 'w') as h5file:
+        tf.keras.models.save_model(model, h5file)
+    model_buffer.seek(0)  # Переместить указатель в начало потока
+
+    # Задание метаданных для файла, который будет загружен на Google Drive
     file_metadata = {
         'name': model_name,
-        'mimeType': 'application/octet-stream'
+        'mimeType': 'application/octet-stream',  # MIME type for .h5 file
+        'parents': '1MgctFDUGBgx2E-ZZac9V71MFAKj-cTqD'  # Добавление идентификатора папки
     }
     
-    media = MediaFileUpload(os.path.join(model_directory, model_name),
-                            mimetype='application/octet-stream',
-                            resumable=True)
+    # Подготовка потоковой загрузки
+    media = MediaIoBaseUpload(model_buffer,
+                              mimetype='application/octet-stream',
+                              resumable=True)
     
+    # Загрузка файла на Google Drive
     file = service.files().create(body=file_metadata,
                                   media_body=media,
                                   fields='id').execute()
     
-    print(f"Model saved to Drive with file ID: {file.get('id')}")
+    print(f'Model {model_name} ID: {file.get("id")}')
+
+    share_file_with_user(service, "1-kaiGuc_BDqXknwHBSH1ZBK_hrc3WBkq", 'vladar21@gmail.com')
+
+
     
 def load_or_train_model(worksheet):
     model_directory = 'tic_tac_toe_model'
@@ -307,12 +356,11 @@ def game(leadersboard_data_sheet, tic_tac_toe_data_sheet, nickname):
                 save_board_to_google_sheets(tic_tac_toe_data_sheet, board, best_move)
         display_board(board)
         current_player = 1 if current_player == -1 else -1
-    if model is not None:
-        model_directory = 'tic_tac_toe_model'
-        if not os.path.exists(model_directory):
-            os.makedirs(model_directory)  # This will create the directory if it doesn't exist
-        model_file = os.path.join(model_directory, 'tic_tac_toe_model.keras')
-        model.save(model_file)
+
+    if model is not None:        
+        # save model to the Google Drive
+        save_model_to_google_drive(SERVICE, model, MODEL_NAME)
+        
 
 def main():
     # Load data from Google Sheets at the start of the main function
