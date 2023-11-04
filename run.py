@@ -63,27 +63,27 @@ def save_model_to_google_drive(service, model, model_name):
             print(u'{0} ({1})'.format(item['name'], item['id']))
 
 
-    # Сериализация Keras модели в формате h5 в память
+    # Serializing a Keras model in h5 format into memory
     model_buffer = io.BytesIO()
     
-    # Сохраняем модель в формате HDF5 в буфер
+    # Save the model in HDF5 format to the buffer
     with h5py.File(model_buffer, 'w') as h5file:
         tf.keras.models.save_model(model, h5file)
-    model_buffer.seek(0)  # Переместить указатель в начало потока
+    model_buffer.seek(0)  # Move the pointer to the beginning of the stream
 
-    # Задание метаданных для файла, который будет загружен на Google Drive
+    # Set metadata for a file that will be uploaded to Google Drive
     file_metadata = {
         'name': model_name,
         'mimeType': 'application/octet-stream',  # MIME type for .h5 file
-        'parents': '1MgctFDUGBgx2E-ZZac9V71MFAKj-cTqD'  # Добавление идентификатора папки
+        'parents': '1MgctFDUGBgx2E-ZZac9V71MFAKj-cTqD'  # Adding a Folder ID (TicTacToe folder)
     }
     
-    # Подготовка потоковой загрузки
+    # Preparing a streaming download
     media = MediaIoBaseUpload(model_buffer,
                               mimetype='application/octet-stream',
                               resumable=True)
     
-    # Загрузка файла на Google Drive
+    # Uploading a file to Google Drive
     file = service.files().create(body=file_metadata,
                                   media_body=media,
                                   fields='id').execute()
