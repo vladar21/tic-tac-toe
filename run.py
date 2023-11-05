@@ -24,7 +24,6 @@ import h5py
 # tf.data.experimental.enable_debug_mode()
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
-
 SERVICE_ACCOUNT_FILE = 'creds.json'
 SCOPES = [
     'https://www.googleapis.com/auth/drive',
@@ -37,24 +36,26 @@ CREDENTIALS = Credentials.from_service_account_file(
     scopes=SCOPES
 )
 
+# Authorize the credentials and create a client using gspread.
+CLIENT = gspread.authorize(CREDENTIALS)
+
 SERVICE = build('drive', 'v3', credentials=CREDENTIALS)
 MODEL_NAME = "tic_tac_toe_model.h5"
 
 
-def share_file_with_user(service, file_id, user_email):
+def share_file_with_user(file_id, user_email):
     user_permission = {
         'type': 'user',
         'role': 'writer',
         'emailAddress': user_email
     }
-    service.permissions().create(
+    SERVICE.permissions().create(
         fileId=file_id,
         body=user_permission,
         fields='id',
     ).execute()
 
-
-def save_model_to_google_drive(service, model, model_name):
+def save_model_to_google_drive(model):
 
     # Serializing a Keras model in h5 format into memory
     model_buffer = io.BytesIO()
@@ -66,7 +67,7 @@ def save_model_to_google_drive(service, model, model_name):
 
     # Set metadata for a file that will be uploaded to Google Drive
     file_metadata = {
-        'name': model_name,
+        'name': MODEL_NAME,
         'mimeType': 'application/octet-stream',  # MIME type for .h5 file
         'parents': '1MgctFDUGBgx2E-ZZac9V71MFAKj-cTqD'  # Adding a Folder ID (TicTacToe folder)
     }
@@ -77,31 +78,31 @@ def save_model_to_google_drive(service, model, model_name):
                               resumable=True)
     
     # Uploading a file to Google Drive
-    file = service.files().create(body=file_metadata,
+    file = SERVICE.files().create(body=file_metadata,
                                   media_body=media,
                                   fields='id').execute()
     
-    print(f'Model {model_name} ID: {file.get("id")}')
+    print(f'Model {MODEL_NAME} ID: {file.get("id")}')
 
-def get_model_id_by_name(service, model_name):
-    results = service.files().list(
-        q=f"name='{model_name}'",
+def get_model_id_by_name():
+    results = SERVICE.files().list(
+        q=f"name='{MODEL_NAME}'",
         pageSize=10,
         fields="files(id, name)"
     ).execute()
     items = results.get('files', [])
 
     if not items:
-        print(f"No files with name {model_name} found.")
+        print(f"No files with name {MODEL_NAME} found.")
         return None
     else:
         # If several files with the same name are found, we return the ID of the first
         model_id = items[0]['id']
-        print(f"Found model {model_name} with ID: {model_id}")
+        print(f"Found model {MODEL_NAME} with ID: {model_id}")
         return model_id
 
-def download_model_from_google_drive(service, file_id):
-    request = service.files().get_media(fileId=file_id)
+def download_model_from_google_drive(file_id):
+    request = SERVICE.files().get_media(fileId=file_id)
     fh = io.BytesIO()
     downloader = MediaIoBaseDownload(fh, request)
     done = False
@@ -123,13 +124,13 @@ def download_model_from_google_drive(service, file_id):
     
     return model
 
-def load_or_train_model(service, model_name, worksheet):
+def load_or_train_model(worksheet):
     try:
-        file_id = get_model_id_by_name(service, model_name)
+        file_id = get_model_id_by_name()
         if file_id == None:
             return train_model(worksheet)
         # Trying to download a model from Google Drive
-        model = download_model_from_google_drive(service, file_id)
+        model = download_model_from_google_drive(file_id)
         print("Model loaded successfully from Google Drive.")
     except Exception as e:
         print(f"An error occurred while loading the model from Google Drive: {e}")
@@ -172,39 +173,9 @@ def train_model(worksheet):
         return None
 
 def load_data_from_google_sheets():
-
-    # Define the scope of the access.
-    scope = [
-        "https://www.googleapis.com/auth/spreadsheets",
-        "https://www.googleapis.com/auth/drive.file",
-        "https://www.googleapis.com/auth/drive"
-    ]
-
-    # Checking file availability creds.json
-    creds_file = 'creds.json'
-    if not os.path.exists(creds_file):
-        print("Credentials file 'creds.json' not found.")
-        return None, None, None
-    if not os.access(creds_file, os.R_OK):
-        print("Credentials file 'creds.json' is not readable.")
-        return None, None, None
-
-    # Load the credentials from the 'creds.json' file.
-    try:
-        creds = Credentials.from_service_account_file('creds.json', scopes=scope)
-    except FileNotFoundError:
-        print("Credentials file 'creds.json' not found.")
-        return None, None, None
-    except Exception as e:
-        print(f"An error occurred while loading credentials: {e}")
-        return None, None, None
-
-    # Authorize the credentials and create a client using gspread.
-    client = gspread.authorize(creds)
-
     # Try to open the spreadsheet and the worksheets within it.
     try:
-        sheet = client.open('tic_tac_toe')
+        sheet = CLIENT.open('tic_tac_toe')
         leadersboard_data_sheet = sheet.worksheet('leadersboard')
         tic_tac_toe_data_sheet = sheet.worksheet('tic_tac_toe_data_sheet')
     except gspread.exceptions.SpreadsheetNotFound:
@@ -219,14 +190,14 @@ def load_data_from_google_sheets():
 
     return leadersboard_data_sheet, tic_tac_toe_data_sheet
     
-def game(service, model_name, leadersboard_data_sheet, tic_tac_toe_data_sheet, nickname):
+def game(leadersboard_data_sheet, tic_tac_toe_data_sheet, nickname):
     print('\nGame starting.\n')
     display_start_game()
     current_player = 1
     X_train = []
     y_train = []
     board = [[0, 0, 0] for _ in range(3)]  # Initialize the board.
-    model = load_or_train_model(service, model_name, tic_tac_toe_data_sheet)
+    model = load_or_train_model(tic_tac_toe_data_sheet)
     while True:           
         game_over, winner = check_game_status(board)
         if game_over:
@@ -283,7 +254,7 @@ def game(service, model_name, leadersboard_data_sheet, tic_tac_toe_data_sheet, n
 
     if model is not None:        
         # save model to the Google Drive
-        save_model_to_google_drive(SERVICE, model, MODEL_NAME)
+        save_model_to_google_drive(model)
         
 
 def main():
@@ -304,13 +275,13 @@ def main():
     start = start.lower()
     # Main game loop
     if start == 'y':
-        game(SERVICE, MODEL_NAME, leadersboard_data_sheet, tic_tac_toe_data_sheet, nickname)
+        game(leadersboard_data_sheet, tic_tac_toe_data_sheet, nickname)
     elif start == 'l':
         display_leadersboard(leadersboard_data_sheet)
         start = str(input("Do you want to play game or exit? \n(Y - game, any other - exit): \n"))
         start = start.lower()
         if start == 'y':
-            game(SERVICE, MODEL_NAME, leadersboard_data_sheet, tic_tac_toe_data_sheet, nickname)
+            game(leadersboard_data_sheet, tic_tac_toe_data_sheet, nickname)
         else:
             print("\nGame over.\n")
     else:
