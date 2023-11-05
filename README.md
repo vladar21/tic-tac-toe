@@ -1,94 +1,154 @@
-# Tic-Tac-Toe Game
+# The Tic Tac Toe with AI
 
-This Python command-line game, "Tic-tac-toe", allows you to compete against artificial intelligence. The AI can be trained using gameplay data and played against it, which makes the game interesting not only because of the gameplay, but also because it is fun to watch the AI evolve in real time.
+## Table of Contents
 
-[View the live project here.](https://tic-tac-toe-with-ai-pygame-2d980f4c2d09.herokuapp.com/)
+- [Project Goals](#project-goals)
+- [User Experience](#user-experience)
+- [Design](#design)
+- [Features](#features)
+- [Technologies Used](#technologies-used)
+- [Testing](#testing)
+- [Bugs](#bugs)
+- [Deployment](#deployment)
+- [Clone a Repository Code Locally](#clone-a-repository-code-locally)
+- [Forking in GitHub](#forking-in-github)
+- [Credits](#credits)
 
-## Description
-This console-based Tic-Tac-Toe game provides an opportunity to play the classic game against an AI opponent. The AI can be trained through gameplay data and then used to make predictions based on its training. The game is designed to provide an enjoyable and challenging experience for players of all skill levels.
+---
 
- ![Start display](images/tic_tac_toe_start.jpg)
+## Project Goals
 
-## User Goals
-- **Play Tic-Tac-Toe:** Users can play the game against the AI.
-- **Train the AI:** Users can train the AI model by playing games against it.
-- **Load an AI Model:** Users can load an existing AI model for gameplay.
-- **Enjoyable Experience:** Users should have a fun and engaging gaming experience.
+### User Goals
 
-## User Stories
-As a user, I want to:
-1. **Play Tic-Tac-Toe against the computer.**
-   - I can enjoy a game of Tic-Tac-Toe without needing a human opponent.
-2. **Train the AI model by playing games against it.**
-   - I can improve the AI's skill by playing games and letting it learn from our interactions.
-3. **Load an existing AI model to play against.**
-   - I can use a pre-trained AI model to challenge my Tic-Tac-Toe skills.
-4. **Have an easy and intuitive way to make moves during the game.**
-   - I should be able to make my moves simply and quickly.
-5. **Receive feedback on the game's outcome.**
-   - I want to know who won, lost, or if the game ended in a draw.
+- Provide an engaging, old-school game of Tic Tac Toe that users can play against a self-learning AI.
+- Offer a leaderboard system where users can see their rankings based on game outcomes.
+
+### Site Owner Goals
+
+- Create an interactive and funny game that keeps users returning and competing for the top leaderboard positions.
+- Collect and use gameplay data to improve AI algorithms.
+- Improve the owner's machine learning skills.
+
+[Back to Table of Contents](#table-of-contents)
+
+---
+
+## User Experience
+
+### Target Audience
+
+- Individuals looking for a quick and entertaining game that challenges their strategic thinking.
+- Players interested in competing against AI with learning capabilities.
+
+### User Stories
+
+- As a user, I want to easily understand how to play the game and what the rules are.
+- As a player, I wish to see my game history and how I rank compared to other players.
+- As a competitive user, I want the AI to be challenging enough that it provides a sense of accomplishment when I win.
+
+[Back to Table of Contents](#table-of-contents)
+
+---
+
+## Design
+
+### Flowchart 
+
+- The flowchart details the logic of the game, the decision-making process of the AI, and the interactions between different modules of the application.
+
+[Back to Table of Contents](#table-of-contents)
+
+---
 
 ## Features
-- **Tic-Tac-Toe Game:** The core feature is a console-based Tic-Tac-Toe game.
-- **AI Model Training:** Users can train the AI model through gameplay data.
-- **AI Model Usage:** Trained AI models can be loaded and used to play against.
-- **User-Friendly Moves:** The game provides an intuitive way for users to make moves.
-- **Outcome Feedback:** At the end of the game, the outcome is displayed as a Winner.
-- **Statistics:** After completing the game, users can view common statistics, including total human and AI wins or draws.
+
+#### Welcome Screen
+
+- A friendly interface greets the user and presents them with options to start a new game, view the leaderboard, or exit.
+
+#### Game Rules
+
+- The rules are succinctly outlined for quick reference for new and returning players.
+
+#### Game Play
+
+- The game play is turn-based, with the user making moves against the AI. The state of the game is displayed after each move, and the game announces the winner or a draw when the game concludes.
+
+[Back to Table of Contents](#table-of-contents)
+
+---
 
 ## Technologies Used
-- **Python:** The core programming language used for the game.
-- **TensorFlow:** For building and training the AI model.
-- **gspread:** To interact with Google Sheets for data storage.
-- **Google Sheets API:** To manage game data.
 
-## Installation and Usage
-1. **Clone the Repository:**
-   ```bash
-   git clone https://github.com/yourusername/tic-tac-toe.git
-   cd tic-tac-toe
-2. **Install Dependencies:**
-    
-    Install the required Python libraries using pip:
+- Python for the main game logic.
+- TensorFlow for implementing and training the AI model.
+- Google Sheets API for storing game outcomes and leaderboard.
+- Google Drive API for managing the AI model's storage.
 
-    ```bash    
-    pip install -r requirements.txt
-4. **Run the Game:**
-    
-    Start the game by running the main.py script.
-    ```bash
-    python main.py
-5. **Gameplay:**
-    - Follow the on-screen instructions to play the game.
-    - Make your moves by entering a number from 0 to 8, indicating the position on the board.
-    - The game will provide feedback on the outcome.
+[Back to Table of Contents](#table-of-contents)
 
-## Future Enhancements
-Here are several ideas for improving this project in the future:
-
-- Implement a graphical user interface (GUI) to make the game more visually appealing.
-- Enhance the AI training capabilities to improve its skill and decision-making.
-- Add functionality to save and load gameplay data and AI models.
+---
 
 ## Testing
-We have performed thorough testing, including unit tests for the game logic and AI training process. We are continuously working to ensure the game's reliability and performance.
+
+### Python Validation
+
+- The code was validated using pylint and adheres to PEP8 standards, ensuring readability and maintainability.
+
+### Manual Testing
+
+- The game was manually tested to ensure all features function as intended and that the user interface is intuitive and responsive.
+
+[Back to Table of Contents](#table-of-contents)
+
+---
 
 ## Bugs
-Under construction
+
+- [Under Constraction].
+
+[Back to Table of Contents](#table-of-contents)
+
+---
 
 ## Deployment
-This is a console-based game, and there is no specific deployment process. You can run it on your local machine without the need for hosting or server deployment.
+
+### Version Control
+
+- The development process utilized Git for version control, with regular commits and descriptive messages to track changes and facilitate collaboration.
+
+### Heroku Deployment
+
+- Detailed steps are provided on how the game was deployed on Heroku, allowing users to access it through a web interface.
+
+---
+
+### Clone a Repository Code Locally
+
+- Instructions for cloning the repository are provided to enable other developers to run the game locally and contribute to its development.
+
+---
+
+### Forking in GitHub
+
+- Guidelines on how to fork the repository on GitHub are available, encouraging open-source collaboration.
+
+[Back to Table of Contents](#table-of-contents)
+
+---
 
 ## Credits
-Code: 
 
-Content: 
+### Code
 
-Media: 
+- Attribution to open-source libraries and code snippets that were utilized in the creation of the game.
 
-Acknowledgements: 
+### Design
 
+- Recognition of any design inspiration or assets that were used to create the user interface.
 
+### Acknowledgements
 
-## License
-This project is open-source and licensed under the MIT License. You are free to use, modify, and distribute the code in accordance with the license terms.
+- Special thanks to individuals who have contributed to the ideation, development, and testing phases of the game.
+
+[Back to Table of Contents](#table-of-contents)
