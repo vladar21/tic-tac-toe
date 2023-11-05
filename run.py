@@ -20,7 +20,6 @@ import io
 from googleapiclient.http import MediaIoBaseUpload
 from googleapiclient.http import MediaIoBaseDownload
 import h5py
-from tensorflow.keras.models import load_model
 
 # tf.data.experimental.enable_debug_mode()
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
@@ -113,7 +112,8 @@ def download_model_from_google_drive(service, file_id):
     
     # Load the Keras model from the h5py File object that is created from the buffer
     with h5py.File(fh, 'r') as h5file:
-        model = tf.keras.models.load_model(h5file)
+        model = tf.keras.models.load_model(h5file, compile=False)
+        model.compile(optimizer='adam', loss='...', metrics=['...'])
     
     return model
 
