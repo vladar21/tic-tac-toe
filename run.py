@@ -21,7 +21,6 @@ from googleapiclient.http import MediaIoBaseUpload
 from googleapiclient.http import MediaIoBaseDownload
 import h5py
 
-# tf.data.experimental.enable_debug_mode()
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 SERVICE_ACCOUNT_FILE = 'creds.json'
@@ -189,72 +188,6 @@ def load_data_from_google_sheets():
         return None, None, None
 
     return leadersboard_data_sheet, tic_tac_toe_data_sheet
-    
-# def game(leadersboard_data_sheet, tic_tac_toe_data_sheet, nickname):
-#     print('\nGame starting.\n')
-#     display_start_game()
-#     current_player = 1
-#     X_train = []
-#     y_train = []
-#     board = [[0, 0, 0] for _ in range(3)]  # Initialize the board.
-#     model = load_or_train_model(tic_tac_toe_data_sheet)
-#     while True:           
-#         game_over, winner = check_game_status(board)
-#         if game_over:
-#             if winner == 1:
-#                 print("Player X wins!")
-#                 result = "Win"
-#             elif winner == -1:
-#                 print("Player O wins!")
-#                 result = "Lose"
-#             elif winner == 0:
-#                 print("The game is a draw!")
-#                 result = "Draw"
-#             update_leadersboard(leadersboard_data_sheet, nickname, result)
-#             print("\nPlay again?")
-#             play_or_no = str(input("(Y - if yes, any other - if no): \n"))
-#             play_or_no = play_or_no.lower()
-#             board = [[0, 0, 0] for _ in range(3)]
-#             if play_or_no != 'y':
-#                 display_leadersboard(leadersboard_data_sheet)
-#                 break
-#         if current_player == 1:
-#              # Handle player X's turn (human player)
-#             try:
-#                 move = int(input("Your move (0-8): \n"))
-#                 if board[move // 3][move % 3] != 0:
-#                     print("Cell is already taken. Please choose another cell.")
-#                     continue  # Skip the rest of the loop and ask for input again                
-#                 board[move // 3][move % 3] = 1
-#                 flattened_board = [cell for row in board for cell in row]
-#                 X_train.append(flattened_board)
-#                 y_train.append(move)
-#                 # Save the current board state to Google Sheets
-#                 save_board_to_google_sheets(tic_tac_toe_data_sheet, board, move)
-#             except ValueError:
-#                 print("Invalid input. Please enter a number from 0 to 8.")
-#                 continue  # Skip the rest of the loop and ask for input again
-#             except IndexError:
-#                 print("Move is out of range. Please enter a number from 0 to 8.")
-#                 continue  # Skip the rest of the loop and ask for input again
-#         else:
-#             if model is not None:
-#                 flattened_board = [cell for row in board for cell in row]
-#                 board_as_input = [flattened_board]
-#                 prediction = model.predict(board_as_input)[0]
-#                 valid_moves = [i for i in range(9) if board[i // 3][i % 3] == 0]
-#                 best_move = max(valid_moves, key=lambda i: prediction[i])
-#                 board[best_move // 3][best_move % 3] = -1
-#                 flattened_board = [cell for row in board for cell in row]
-#                 X_train.append(flattened_board)
-#                 # Save the current board state to Google Sheets
-#                 save_board_to_google_sheets(tic_tac_toe_data_sheet, board, best_move)
-#         display_board(board)
-#         current_player = 1 if current_player == -1 else -1
-
-#     if model is not None:        
-#         # save model to the Google Drive
-#         save_model_to_google_drive(model)
 
 def player_turn(board, X_train, y_train, tic_tac_toe_data_sheet):
     try:
@@ -321,7 +254,7 @@ def game(leadersboard_data_sheet, tic_tac_toe_data_sheet, nickname):
             ai_turn(board, model, X_train, tic_tac_toe_data_sheet)
         
         display_board(board)
-        
+
         if check_and_handle_game_over(board, leadersboard_data_sheet, nickname):
             if not prompt_replay():
                 display_leadersboard(leadersboard_data_sheet)
