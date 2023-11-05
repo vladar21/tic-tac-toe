@@ -57,20 +57,6 @@ def share_file_with_user(service, file_id, user_email):
 
 def save_model_to_google_drive(service, model, model_name):
 
-    results = service.files().list(
-        q="'1MgctFDUGBgx2E-ZZac9V71MFAKj-cTqD' in parents",
-        pageSize=10,
-        fields="nextPageToken, files(id, name)").execute()
-    items = results.get('files', [])
-
-    if not items:
-        print('No files found.')
-    else:
-        print('Files:')
-        for item in items:
-            print(u'{0} ({1})'.format(item['name'], item['id']))
-
-
     # Serializing a Keras model in h5 format into memory
     model_buffer = io.BytesIO()
     
