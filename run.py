@@ -113,7 +113,13 @@ def download_model_from_google_drive(service, file_id):
     # Load the Keras model from the h5py File object that is created from the buffer
     with h5py.File(fh, 'r') as h5file:
         model = tf.keras.models.load_model(h5file, compile=False)
-        model.compile(optimizer='adam', loss='...', metrics=['...'])
+
+        # Compiling the model specifying the optimizer, loss function, and metrics
+        model.compile(
+            optimizer='adam',              # Optimizer
+            loss='sparse_categorical_crossentropy',  # Loss function
+            metrics=['accuracy']           # Metrics to track
+        )
     
     return model
 
