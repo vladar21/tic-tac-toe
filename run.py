@@ -13,7 +13,7 @@ import tensorflow as tf
 print(f'tensorflow version {tf.__version__}')
 from tensorflow import keras
 # my library
-from funcs import display_start_game, display_board, display_leadersboard, update_leadersboard, save_board_to_google_sheets, check_game_status
+from tic_tac_toe_ui_funcs import display_start_game, display_board, display_leadersboard
 # Google Drive
 from googleapiclient.discovery import build
 import io
@@ -41,7 +41,7 @@ CLIENT = gspread.authorize(CREDENTIALS)
 SERVICE = build('drive', 'v3', credentials=CREDENTIALS)
 MODEL_NAME = "tic_tac_toe_model.h5"
 
-
+############## work with Google Drive and Google Sheets #######################
 def share_file_with_user(file_id, user_email):
     user_permission = {
         'type': 'user',
@@ -123,6 +123,75 @@ def download_model_from_google_drive(file_id):
     
     return model
 
+def load_data_from_google_sheets():
+    # Try to open the spreadsheet and the worksheets within it.
+    try:
+        sheet = CLIENT.open('tic_tac_toe')
+        leadersboard_data_sheet = sheet.worksheet('leadersboard')
+        tic_tac_toe_data_sheet = sheet.worksheet('tic_tac_toe_data_sheet')
+    except gspread.exceptions.SpreadsheetNotFound:
+        print("The spreadsheet 'tic_tac_toe' was not found.")
+        return None, None, None
+    except gspread.exceptions.WorksheetNotFound:
+        print("A required worksheet was not found in the spreadsheet.")
+        return None, None, None
+    except Exception as e:
+        print(f"An error occurred while opening the spreadsheet: {e}")
+        return None, None, None
+
+    return leadersboard_data_sheet, tic_tac_toe_data_sheet
+
+def update_leadersboard(leadersboard_data_sheet, nickname, result):
+
+    # Fetching the current data from the sheet
+    leadersboard_data = leadersboard_data_sheet.get_all_values()
+    headers = leadersboard_data[0]  # Assuming the first row contains headers
+
+    # Find the indexes for the relevant columns
+    nickname_index = headers.index("human_nickname") + 1  # +1 for Google Sheets indexing
+    total_index = headers.index("total_games") + 1
+    win_index = headers.index("win_human") + 1
+    lose_index = headers.index("win_ai") + 1
+    draws_index = headers.index("draws") + 1
+
+    # Find the player in the leaderboard
+    player_row = None
+    for i, row in enumerate(leadersboard_data[1:], start=2):  # Start=2 to account for header row
+        if row[nickname_index - 1] == nickname:  # -1 to convert back from Google Sheets indexing
+            player_row = i
+            break
+
+    if player_row:
+        # Player exists, update their record
+        cell = leadersboard_data_sheet.cell(player_row, total_index)
+        leadersboard_data_sheet.update_cell(player_row, total_index, int(cell.value) + 1)
+        if result == 'Win':
+            cell = leadersboard_data_sheet.cell(player_row, win_index)
+            leadersboard_data_sheet.update_cell(player_row, win_index, int(cell.value) + 1)
+        elif result == 'Lose':
+            cell = leadersboard_data_sheet.cell(player_row, lose_index)
+            leadersboard_data_sheet.update_cell(player_row, lose_index, int(cell.value) + 1)
+        elif result == 'Draw':
+            cell = leadersboard_data_sheet.cell(player_row, draws_index)
+            leadersboard_data_sheet.update_cell(player_row, draws_index, int(cell.value) + 1)
+    else:
+        # Player doesn't exist, append a new row
+        new_row_values = [''] * len(headers)
+        new_row_values[nickname_index - 1] = nickname
+        new_row_values[total_index - 1] = 1
+        new_row_values[win_index - 1] = 1 if result == 'Win' else 0
+        new_row_values[lose_index - 1] = 1 if result == 'Lose' else 0
+        new_row_values[draws_index - 1] = 1 if result == 'Draw' else 0
+        leadersboard_data_sheet.append_row(new_row_values)
+
+def save_board_to_google_sheets(worksheet, board, move):
+    board_str = "".join(["X" if cell == 1 else "O" if cell == -1 else " " for row in board for cell in row])
+    data_to_insert = [[board_str, move]]
+    worksheet.insert_rows(data_to_insert, 2)
+
+############## work with Google Drive and Google Sheets #######################
+
+
 def load_or_train_model(worksheet):
     try:
         file_id = get_model_id_by_name()
@@ -138,6 +207,7 @@ def load_or_train_model(worksheet):
     
     return model
 
+############## work with TensorFlow model #######################
 def train_model(worksheet):
     data = worksheet.get_all_values()
     if not data:
@@ -170,25 +240,10 @@ def train_model(worksheet):
     else:
         print("No training data available. Starting with an untrained model.")
         return None
+    
+############## work with TensorFlow model #######################
 
-def load_data_from_google_sheets():
-    # Try to open the spreadsheet and the worksheets within it.
-    try:
-        sheet = CLIENT.open('tic_tac_toe')
-        leadersboard_data_sheet = sheet.worksheet('leadersboard')
-        tic_tac_toe_data_sheet = sheet.worksheet('tic_tac_toe_data_sheet')
-    except gspread.exceptions.SpreadsheetNotFound:
-        print("The spreadsheet 'tic_tac_toe' was not found.")
-        return None, None, None
-    except gspread.exceptions.WorksheetNotFound:
-        print("A required worksheet was not found in the spreadsheet.")
-        return None, None, None
-    except Exception as e:
-        print(f"An error occurred while opening the spreadsheet: {e}")
-        return None, None, None
-
-    return leadersboard_data_sheet, tic_tac_toe_data_sheet
-
+############## game #######################
 def player_turn(board, X_train, y_train, tic_tac_toe_data_sheet):
     try:
         move = int(input("Your move (0-8): \n"))
@@ -215,6 +270,31 @@ def ai_turn(board, model, X_train, tic_tac_toe_data_sheet):
     flattened_board = [cell for row in board for cell in row]
     X_train.append(flattened_board)
     save_board_to_google_sheets(tic_tac_toe_data_sheet, board, best_move)
+
+def check_game_status(board):
+    # Check for a win for each player
+    for player in [1, -1]:
+        winning_positions = [
+            # Horizontal
+            board[0], board[1], board[2],
+            # Vertical
+            [board[0][0], board[1][0], board[2][0]],
+            [board[0][1], board[1][1], board[2][1]],
+            [board[0][2], board[1][2], board[2][2]],
+            # Diagonals
+            [board[0][0], board[1][1], board[2][2]],
+            [board[0][2], board[1][1], board[2][0]]
+        ]
+        
+        if any(all(pos == player for pos in win_pos) for win_pos in winning_positions):
+            return True, player  # A win is detected and return the player who won
+
+    # Check for a draw (all cells are filled)
+    if all(cell != 0 for row in board for cell in row):
+        return True, 0  # The game is a draw
+    
+    # If no win or draw, the game is not over
+    return False, None
 
 def check_and_handle_game_over(board, leadersboard_data_sheet, nickname):
     game_over, winner = check_game_status(board)
@@ -265,6 +345,9 @@ def game(leadersboard_data_sheet, tic_tac_toe_data_sheet, nickname):
 
     if model is not None:
         save_model_to_google_drive(model)
+
+############## game #######################
+
 
 def main():
     # Load data from Google Sheets at the start of the main function
