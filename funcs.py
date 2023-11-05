@@ -29,22 +29,26 @@ def display_leadersboard(leadersboard_data_sheet):
 
     # Fetching the data from the sheet
     leadersboard_data = leadersboard_data_sheet.get_all_values()
-    
+
     print("\nLeadersboard")
 
     # Headers for the table
-    headers = ["PP", "Human Nickname", "Total Games", "Win Human", "Win AI", "Draw"]  # Added "Draw" to headers
+    headers = ["PP", "Human Nickname", "Total Games", "Win Human", "Win AI", "Draw"]
 
     # If there are no data rows or only header row, print the headers and return
     if len(leadersboard_data) <= 1:
         print(" | ".join(headers))
         return
 
+    # Sort the data by 'Win Human' column in descending order, skipping the header
+    # Make sure to convert 'Win Human' values to integers for sorting
+    leadersboard_data[1:] = sorted(leadersboard_data[1:], key=lambda x: int(x[2]), reverse=True)
+
     # Determine the maximum width for each column
     column_lengths = [len(header) for header in headers]
     for row in leadersboard_data[1:]:  # Skip the header row in the data
-        for i in range(len(row)):
-            column_lengths[i] = max(column_lengths[i], len(row[i]))
+        for i, (item, header) in enumerate(zip(row, headers)):
+            column_lengths[i] = max(column_lengths[i], len(item))
 
     # Create a format string for each row with appropriate spacing
     row_format = " | ".join(["{:<" + str(length) + "}" for length in column_lengths])
@@ -53,11 +57,12 @@ def display_leadersboard(leadersboard_data_sheet):
     print(row_format.format(*headers))
     print("-" * (sum(column_lengths) + 3 * (len(headers) - 1)))  # Print header separator
 
-    # Print the formatted data rows, skipping the first row which is headers
-    for i, row_data in enumerate(leadersboard_data[1:], start=1):  # Start with 1 to skip header row
+    # Print the sorted and formatted data rows, skipping the first row which is headers
+    for i, row_data in enumerate(leadersboard_data[1:], start=1):
         # If the row has less columns than headers, append empty strings
         row_data += [""] * (len(headers) - len(row_data))
-        print(row_format.format(i, *row_data))  # Use row_data instead of row for clarity
+        # Print each row with the correct number for 'PP'
+        print(row_format.format(i, *row_data))
 
 def update_leadersboard(leadersboard_data_sheet, nickname, result):
 
