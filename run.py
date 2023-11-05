@@ -3,49 +3,17 @@ import warnings
 # Suppress all UserWarnings
 warnings.filterwarnings('ignore', category=UserWarning)
 
-# Google Sheet
-# import gspread
-# from google.oauth2.service_account import Credentials
-# work with filesystem
 import os
-# AI model
-import tensorflow as tf
-print(f'tensorflow version {tf.__version__}')
-from tensorflow import keras
-# my library
-from tic_tac_toe_ui import display_start_game, display_board, display_leadersboard
-from tic_tac_toe_google import save_model_to_google_drive, get_model_id_by_name, download_model_from_google_drive, load_data_from_google_sheets, update_leadersboard, save_board_to_google_sheets
-# Google Drive
-# from googleapiclient.discovery import build
-# import io
-# from googleapiclient.http import MediaIoBaseUpload
-# from googleapiclient.http import MediaIoBaseDownload
-# import h5py
-
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
-# SERVICE_ACCOUNT_FILE = 'creds.json'
-# SCOPES = [
-#     'https://www.googleapis.com/auth/drive',
-#     "https://www.googleapis.com/auth/spreadsheets",
-#     "https://www.googleapis.com/auth/drive.file"
-# ]
-
-# CREDENTIALS = Credentials.from_service_account_file(
-#     SERVICE_ACCOUNT_FILE,
-#     scopes=SCOPES
-# )
-
-# # Authorize the credentials and create a client using gspread.
-# CLIENT = gspread.authorize(CREDENTIALS)
-
-# SERVICE = build('drive', 'v3', credentials=CREDENTIALS)
-# MODEL_NAME = "tic_tac_toe_model.h5"
+# my library
+from tic_tac_toe_ui import display_start_game, display_board, display_leadersboard
+from tic_tac_toe_google import save_model_to_google_drive, load_data_from_google_sheets, update_leadersboard, save_board_to_google_sheets, get_model_id_by_name, download_model_from_google_drive
+from tic_tac_toe_tf import train_model
 
 
-#################################################################
-############## work with TensorFlow model #######################
-
+#################################################
+############## game funcs #######################
 def load_or_train_model(worksheet):
     try:
         file_id = get_model_id_by_name()
@@ -60,46 +28,6 @@ def load_or_train_model(worksheet):
         return train_model(worksheet)
     
     return model
-
-
-def train_model(worksheet):
-    data = worksheet.get_all_values()
-    if not data:
-        print("The worksheet is empty. Starting with empty data.")
-        return None  # Explicitly return None
-
-    X_train = []
-    y_train = []
-
-    for row in data:
-        if len(row) < 2 or not row[0]:
-            continue
-
-        board_state = [1 if cell == 'X' else -1 if cell == 'O' else 0 for cell in row[0]]
-        X_train.append(board_state)
-        move = int(row[1])
-        y_train.append(move)
-
-    if len(X_train) > 0:
-        model = keras.Sequential([
-            keras.layers.Input(shape=(9,)),
-            keras.layers.Dense(128, activation='relu'),
-            keras.layers.Dense(9, activation='softmax')
-        ])
-
-        model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
-
-        model.fit(X_train, y_train, epochs=50, verbose=0)
-        return model
-    else:
-        print("No training data available. Starting with an untrained model.")
-        return None
-    
-############## work with TensorFlow model #######################
-#################################################################
-
-###########################################
-############## game #######################
 
 def player_turn(board, X_train, y_train, tic_tac_toe_data_sheet):
     try:
@@ -203,8 +131,8 @@ def game(leadersboard_data_sheet, tic_tac_toe_data_sheet, nickname):
     if model is not None:
         save_model_to_google_drive(model)
 
-############## game #######################
-###########################################
+############## game funcs #######################
+#################################################
 
 
 def main():
