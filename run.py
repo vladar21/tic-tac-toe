@@ -251,14 +251,14 @@ def game(service, model_name, leadersboard_data_sheet, tic_tac_toe_data_sheet, n
                 result = "Draw"
             update_leadersboard(leadersboard_data_sheet, nickname, result)
             print("\nPlay again?")
-            play_or_no = str(input("(Y - if yes, any other - if no): "))
+            play_or_no = str(input("(Y - if yes, any other - if no): \n"))
             play_or_no = play_or_no.lower()
             board = [[0, 0, 0] for _ in range(3)]
             if play_or_no != 'y':
                 display_leadersboard(leadersboard_data_sheet)
                 break
         if current_player == 1:
-            move = int(input("Your move (0-8): "))
+            move = int(input("Your move (0-8): \n"))
             if board[move // 3][move % 3] == 0:
                 board[move // 3][move % 3] = 1
                 flattened_board = [cell for row in board for cell in row]
@@ -298,16 +298,16 @@ def main():
     
     print("\nTic Tac Toe with Ai")
     print()
-    nickname = input("Please enter your nickname (it must be unique): ").strip()
+    nickname = input("Please enter your nickname (it must be unique): \n").strip()
 
-    start = str(input("Do you want to play game, exit or look at the leadersboard? \n(Y - game, L - leadersboar, any other - exit): "))
+    start = str(input("Do you want to play game, exit or look at the leadersboard? \n(Y - game, L - leadersboar, any other - exit): \n"))
     start = start.lower()
     # Main game loop
     if start == 'y':
         game(SERVICE, MODEL_NAME, leadersboard_data_sheet, tic_tac_toe_data_sheet, nickname)
     elif start == 'l':
         display_leadersboard(leadersboard_data_sheet)
-        start = str(input("Do you want to play game or exit? \n(Y - game, any other - exit): "))
+        start = str(input("Do you want to play game or exit? \n(Y - game, any other - exit): \n"))
         start = start.lower()
         if start == 'y':
             game(SERVICE, MODEL_NAME, leadersboard_data_sheet, tic_tac_toe_data_sheet, nickname)
