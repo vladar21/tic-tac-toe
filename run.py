@@ -83,8 +83,6 @@ def save_model_to_google_drive(service, model, model_name):
     
     print(f'Model {model_name} ID: {file.get("id")}')
 
-    share_file_with_user(service, "1-kaiGuc_BDqXknwHBSH1ZBK_hrc3WBkq", 'vladar21@gmail.com')
-
 def get_model_id_by_name(service, model_name):
     results = service.files().list(
         q=f"name='{model_name}'",
