@@ -242,14 +242,24 @@ def game(service, model_name, leadersboard_data_sheet, tic_tac_toe_data_sheet, n
                 display_leadersboard(leadersboard_data_sheet)
                 break
         if current_player == 1:
-            move = int(input("Your move (0-8): \n"))
-            if board[move // 3][move % 3] == 0:
+             # Handle player X's turn (human player)
+            try:
+                move = int(input("Your move (0-8): \n"))
+                if board[move // 3][move % 3] != 0:
+                    print("Cell is already taken. Please choose another cell.")
+                    continue  # Skip the rest of the loop and ask for input again                
                 board[move // 3][move % 3] = 1
                 flattened_board = [cell for row in board for cell in row]
                 X_train.append(flattened_board)
                 y_train.append(move)
                 # Save the current board state to Google Sheets
                 save_board_to_google_sheets(tic_tac_toe_data_sheet, board, move)
+            except ValueError:
+                print("Invalid input. Please enter a number from 0 to 8.")
+                continue  # Skip the rest of the loop and ask for input again
+            except IndexError:
+                print("Move is out of range. Please enter a number from 0 to 8.")
+                continue  # Skip the rest of the loop and ask for input again
         else:
             if model is not None:
                 flattened_board = [cell for row in board for cell in row]
