@@ -2,7 +2,7 @@
 
 This Python command-line game, "Tic-tac-toe", allows you to compete against artificial intelligence. The AI can be trained using gameplay data and played against it, which makes the game interesting not only because of the gameplay, but also because it is fun to watch the AI evolve in real time.
 
-[View the live project here.](https://vladar21.github.io/english-teacher/)
+[View the live project here.](https://tic-tac-toe-with-ai-pygame-2d980f4c2d09.herokuapp.com/)
 
 ## Description
 This console-based Tic-Tac-Toe game provides an opportunity to play the classic game against an AI opponent. The AI can be trained through gameplay data and then used to make predictions based on its training. The game is designed to provide an enjoyable and challenging experience for players of all skill levels.
