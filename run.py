@@ -10,6 +10,7 @@ from google.oauth2.service_account import Credentials
 import os
 # AI model
 import tensorflow as tf
+print(f'tensorflow version {tf.__version__}')
 from tensorflow import keras
 # my library
 from funcs import display_start_game, display_board, display_leadersboard, update_leadersboard, save_board_to_google_sheets, check_game_status
