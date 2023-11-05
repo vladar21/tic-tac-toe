@@ -19,7 +19,6 @@ import io
 from googleapiclient.http import MediaIoBaseUpload
 from googleapiclient.http import MediaIoBaseDownload
 import h5py
-from keras.models import load_model
 
 
 # tf.data.experimental.enable_debug_mode()
