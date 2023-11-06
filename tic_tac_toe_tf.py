@@ -1,8 +1,11 @@
-# import tensorflow as tf
 from tensorflow import keras
 
 
 def train_model(worksheet):
+    """
+    Train a neural network model to play Tic Tac Toe based on historical game data.
+    """
+
     data = worksheet.get_all_values()
     if not data:
         print("The worksheet is empty. Starting with empty data.")
