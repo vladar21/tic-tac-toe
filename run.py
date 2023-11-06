@@ -150,7 +150,7 @@ def main():
     
     print("\nTic Tac Toe with Ai")
     print()
-    nickname = input("Please enter your nickname (it must be unique): \n").strip()
+    nickname = input("Please enter your nickname: \n").strip()
 
     start = str(input("Do you want to play game, exit or look at the leadersboard? \n(Y - game, L - leadersboar, any other - exit): \n"))
     start = start.lower()

@@ -222,7 +222,7 @@ To clone the repository and run this Tic Tac Toe game locally on your machine, y
 
 Before you begin, make sure you have the following installed:
 - [Git](https://git-scm.com/downloads)
-- Python (at least version 3.6)
+- Python (version 3.8.10)
 - A text editor or an IDE (like Visual Studio Code, PyCharm, etc.)
 
 #### Cloning the Repository
