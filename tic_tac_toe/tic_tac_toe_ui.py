@@ -1,3 +1,10 @@
+"""
+This module is responsible for the user interface of the tic-tac-toe game.
+It contains functions to display the game board, start screen,
+and leaderboard to the user.
+"""
+
+
 def display_start_game():
     """
     Display the starting information for the game, including rules and the

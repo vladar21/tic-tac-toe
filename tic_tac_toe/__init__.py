@@ -1,3 +1,10 @@
+"""
+This module initializes the tic-tac-toe package, setting up the namespace for 
+easy import and usage of its components.
+It may also specify the `__all__` list to define the public API of the package.
+"""
+
+
 from .tic_tac_toe_ui import (
     display_start_game,
     display_board,

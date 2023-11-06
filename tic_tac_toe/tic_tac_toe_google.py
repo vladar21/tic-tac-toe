@@ -1,3 +1,11 @@
+"""
+This module handles interactions with Google services such
+as Google Sheets and Google Drive.
+It includes functions to load and save game data, manage the leaderboard,
+and handle model storage and retrieval.
+"""
+
+
 # work with warnings
 import warnings
 # Google Sheet
