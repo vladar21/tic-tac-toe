@@ -91,6 +91,7 @@ The AI learns with each game and sometimes makes surprisingly good moves already
 ### Game Play
 
 - The game play is turn-based, with the user making moves against the AI. The state of the game is displayed after each move, and the game announces the winner or a draw when the game concludes.
+- To assist players in making their moves, a help positions table is displayed alongside the game board. This table shows the number associated with each board position, making it easier for players to indicate their move by entering the corresponding number.
 
 <img src="resources/images/GamePlay.png" width="800" alt="Game Play">
 
@@ -109,8 +110,9 @@ The AI learns with each game and sometimes makes surprisingly good moves already
 ### User Interface
 
 - Custom-designed user interface functions (`tic_tac_toe_ui.py`) facilitate player interaction and display the game state in a clear and intuitive manner.
-- The game board and leaderboard are displayed in the console, making the game easily playable from any terminal.
-- Current player's position and score are highlighted in yellow color to easily track their standing among other players.
+- The Game board and Leaderboard are displayed in the console, making the game easily playable from any terminal.
+- The Positions table showing the number for each position on the board is displayed next to the Game board, helping players easily indicate their moves by entering the corresponding number.
+- Current player's position and score are highlighted in yellow color in the Leaderboard to easily track their standing among other players.
 
 <img src="resources/images/LeaderBoard.png" width="800" alt="Game Leaderboard">
 
