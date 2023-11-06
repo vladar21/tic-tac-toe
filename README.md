@@ -4,11 +4,13 @@ Play tic-tac-toe with artificial intelligence? This could be fun!
 
 [View the live project here.](https://tic-tac-toe-with-ai-pygame-2d980f4c2d09.herokuapp.com/)
 
-![Start display](images/tic_tac_toe_start.jpg)
+![Start display](resources/images/tic_tac_toe_start.jpg)
 
 ## Introduction
 
-This console game "Tic-tac-toe Crosses" allows you to play a classic game with artificial intelligence. The AI learns with each game and sometimes makes surprisingly good moves already and even, wins :)
+This console game allows you to play a classic Tic Tac Toe game with artificial intelligence.
+
+The AI learns with each game and sometimes makes surprisingly good moves already and even, wins :)
 
 ## Table of Contents
 
@@ -66,7 +68,7 @@ This console game "Tic-tac-toe Crosses" allows you to play a classic game with a
 
 - The flowchart details the logic of the game, the decision-making process of the AI, and the interactions between different modules of the application.
 
-![Flowchart](images/tic_tac_toe_game_diagram.png)
+![Flowchart](resources/images/tic_tac_toe_game_diagram.png)
 
 [Back to Table of Contents](#table-of-contents)
 
@@ -78,19 +80,19 @@ This console game "Tic-tac-toe Crosses" allows you to play a classic game with a
 
 - A friendly interface greets the user and presents them with options to start a new game, view the leaderboard, or exit.
 
-<img src="images/WelcomeScreen.png" width="600" alt="Welcome Screen">
+<img src="resources/images/WelcomeScreen.png" width="800" alt="Welcome Screen">
 
 ### Game Rules
 
 - The rules are succinctly outlined for quick reference for new and returning players.
 
-<img src="images/GameRules.png" width="600" alt="Game Rules">
+<img src="resources/images/GameRules.png" width="800" alt="Game Rules">
 
 ### Game Play
 
 - The game play is turn-based, with the user making moves against the AI. The state of the game is displayed after each move, and the game announces the winner or a draw when the game concludes.
 
-<img src="images/GamePlay.png" width="600" alt="Game Play">
+<img src="resources/images/GamePlay.png" width="800" alt="Game Play">
 
 ### Game Logic
 
@@ -102,14 +104,14 @@ This console game "Tic-tac-toe Crosses" allows you to play a classic game with a
 - Game data is integrated with Google Sheets, providing a seamless experience for data tracking and leaderboard updates.
 - Google Drive API is utilized for model storage and retrieval, allowing the AI to dynamically update based on new gameplay data.
 
-<img src="images/DataIntegration.png" width="600" alt="Data Integration">
+<img src="resources/images/DataIntegration.png" width="800" alt="Data Integration">
 
 ### User Interface
 
 - Custom-designed user interface functions (`tic_tac_toe_ui.py`) facilitate player interaction and display the game state in a clear and intuitive manner.
 - The game board and leaderboard are displayed in the console, making the game easily playable from any terminal.
 
-<img src="images/LeaderBoard.png" width="600" alt="Game Leaderboard">
+<img src="resources/images/LeaderBoard.png" width="800" alt="Game Leaderboard">
 
 ### Code Structure and Management
 
@@ -165,7 +167,7 @@ tic-tac-toe/
 
 - The code has been validated and conforms to PEP8 standards, with additional static code analysis performed using `flake8`, confirming the absence of style and syntax issues.
 
- <img src="images/ResultPEP8Validation.png" width="600" alt="PEP8 validation result">
+ <img src="resources/images/ResultPEP8Validation.png" width="800" alt="PEP8 validation result">
 
 ### Manual Testing
 
@@ -181,11 +183,11 @@ tic-tac-toe/
 
 - **Description:** Incorrect import library name.
 
-  <img src="images/ErrorPacketName.png" width="600" alt="Incorrect import library name">
+  <img src="resources/images/ErrorPacketName.png" width="600" alt="Incorrect import library name">
 
 - **Solution:** Fixed import library name.
 
-  <img src="images/ErrorPacketNameFixed.png" width="600" alt="Fixed import library name">
+  <img src="resources/images/ErrorPacketNameFixed.png" width="600" alt="Fixed import library name">
 
 [Back to Table of Contents](#table-of-contents)
 
@@ -371,5 +373,9 @@ The user interface of the Tic Tac Toe game is the result of thoughtful design co
 -   My Mentor - Oluwafemi Medale - for continuous helpful feedback.
 
 -   Tutor support at Code Institute for their support.
+
+## License
+
+This project is licensed under the MIT License.
 
 [Back to Table of Contents](#table-of-contents)
