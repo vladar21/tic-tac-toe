@@ -1,7 +1,7 @@
 """
 This module contains the machine learning logic
 for the tic-tac-toe game using TensorFlow.
-It includes functions for training the model, 
+It includes functions for training the model,
 making predictions, and processing the game data.
 """
 

@@ -127,13 +127,13 @@ def check_and_handle_game_over(board, leadersboard_data_sheet, nickname):
     game_over, winner = check_game_status(board)
     if game_over:
         if winner == 1:
-            print("Player X wins!")
+            print("\nPlayer X wins!")
             result = "Win"
         elif winner == -1:
-            print("Player O wins!")
+            print("\nPlayer O wins!")
             result = "Lose"
         else:
-            print("The game is a draw!")
+            print("\nThe game is a draw!")
             result = "Draw"
         update_leadersboard(leadersboard_data_sheet, nickname, result)
         return True  # The game is over.

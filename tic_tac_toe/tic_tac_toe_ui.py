@@ -26,33 +26,51 @@ def display_start_game():
     print(f" {start_board[6]} | {start_board[7]} | {start_board[8]} ")
 
 
+def print_row(row_board, row_numbers):
+    """
+    Converts board row values to symbols and aligns them
+    with their respective cell numbers.
+    """
+
+    # Define a dictionary to map numeric values to 'X', 'O', or a blank space
+    value_to_symbol = {1: 'X', -1: 'O', 0: ' '}
+
+    # Convert the row values from numeric to their symbol representations
+    row_board_symbols = [value_to_symbol[item] for item in row_board]
+    row_numbers_str = [str(item) for item in row_numbers]
+
+    # Join the symbols and numbers into strings,
+    # adding extra spaces for alignment
+    # Adjust the number of spaces (' ' * n) as needed for the desired alignment
+    return (' ' * 2 + ' | '.join(row_board_symbols) +
+            ' ' * 11 + ' | '.join(row_numbers_str))
+
+
 def display_board(board):
     """
-    Display the current state of the game board with symbols 'X', 'O',
-    or empty spaces.
+    Displays the game board with current plays and
+    a reference board with cell numbers.
+    Used cells on the reference board are replaced with an asterisk (*).
     """
+    # Create a copy of the board with cell numbers
+    numbers_board = [[str(i + 1 + j * 3) for i in range(3)] for j in range(3)]
 
-    # Get the total number of rows
-    num_rows = len(board)
+    # Replace numbers with '*' in the numbers_board where
+    # the corresponding cell in the board is not empty
+    for y in range(3):
+        for x in range(3):
+            # Assuming 0 is the value for an empty space
+            if board[y][x] != 0:
+                # Assuming you want to display '*' for filled spaces
+                numbers_board[y][x] = '*'
 
-    # Iterate over each row in the board
-    for i, row in enumerate(board):
-        # Print the row with 'X', 'O', or ' ' depending on the cell value
-        print(
-            " | ".join(
-                [
-                    "X" if cell == 1 else
-                    "O" if cell == -1 else
-                    " "
-                    for cell in row
-                ]
-            )
-        )
-
-        # Print a horizontal line to separate the rows, except for the last row
-        if i < num_rows - 1:
-            print("-" * 9)
-    print()  # Print a newline at the end for better formatting
+    # Print the board with headers for user guidance
+    print("Current board:       Positions:")
+    for i in range(3):
+        # Print each row of the board
+        print(print_row(board[i], numbers_board[i]))
+        if i < 2:  # Print the row separator if it's not the last row
+            print(" ---+---+---         ---+---+---")
 
 
 def display_leadersboard(leadersboard_data_sheet, current_player_nickname):

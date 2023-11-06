@@ -1,5 +1,5 @@
 """
-This module initializes the tic-tac-toe package, setting up the namespace for 
+This module initializes the tic-tac-toe package, setting up the namespace for
 easy import and usage of its components.
 It may also specify the `__all__` list to define the public API of the package.
 """
