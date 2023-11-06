@@ -79,6 +79,7 @@ def save_model_to_google_drive(model):
                                   fields='id').execute()
     
     print(f'Model {MODEL_NAME} ID: {file.get("id")} success updated.')
+    print()
 
 def get_model_id_by_name():
     results = SERVICE.files().list(
@@ -94,6 +95,7 @@ def get_model_id_by_name():
     else:
         # If several files with the same name are found, we return the ID of the first
         model_id = items[0]['id']
+        print()
         print(f"Found model {MODEL_NAME} with ID: {model_id}")
         return model_id
 

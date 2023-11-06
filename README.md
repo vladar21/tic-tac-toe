@@ -1,5 +1,15 @@
 # The Tic Tac Toe with AI
 
+Play tic-tac-toe with artificial intelligence? This could be fun!
+
+[View the live project here.](https://tic-tac-toe-with-ai-pygame-2d980f4c2d09.herokuapp.com/)
+
+![Start display](images/tic_tac_toe_start.jpg)
+
+## Introduction
+
+This console game "Tic-tac-toe Crosses" allows you to play a classic game with artificial intelligence. The AI learns with each game and sometimes makes surprisingly good moves already and even, wins :)
+
 ## Table of Contents
 
 - [Project Goals](#project-goals)

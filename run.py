@@ -31,6 +31,7 @@ def load_or_train_model(worksheet):
 
 def player_turn(board, X_train, y_train, tic_tac_toe_data_sheet):
     try:
+        print()
         move = int(input("Your move (0-8): \n"))
         if board[move // 3][move % 3] != 0:
             print("Cell is already taken. Please choose another cell.")
@@ -118,11 +119,13 @@ def game(leadersboard_data_sheet, tic_tac_toe_data_sheet, nickname):
         else:
             ai_turn(board, model, X_train, tic_tac_toe_data_sheet)
         
+        print()
         display_board(board)
 
         if check_and_handle_game_over(board, leadersboard_data_sheet, nickname):
             if not prompt_replay():
                 display_leadersboard(leadersboard_data_sheet)
+                print("\nGame over.\n")
                 break  # Exit the game loop.
             board = [[0, 0, 0] for _ in range(3)]  # Reset the board.
         
