@@ -10,3 +10,4 @@ node_modules/
 
 creds.json
 tic_tac_toe_model
+package.json
