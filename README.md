@@ -147,7 +147,9 @@ This console game "Tic-tac-toe Crosses" allows you to play a classic game with a
 
 ### Python Validation
 
-- The code was validated using pylint and adheres to PEP8 standards, ensuring readability and maintainability.
+- The code has been validated and conforms to PEP8 standards, with additional static code analysis performed using `flake8`, confirming the absence of style and syntax issues.
+
+ <img src="images/ResultPEP8Validation.png" width="600" alt="PEP8 validation result">
 
 ### Manual Testing
 
