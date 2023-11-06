@@ -116,7 +116,23 @@ This console game "Tic-tac-toe Crosses" allows you to play a classic game with a
 - Modular coding approach, separating concerns into distinct files (`run.py`, `tic_tac_toe_ui.py`, `tic_tac_toe_google.py`, `tic_tac_toe_tf.py`) for ease of maintenance and scalability.
 - Scripts for handling UI presentation, Google operations, and TensorFlow model management are included to keep the main game script (`run.py`) clean and focused on game flow.
 
-<img src="images/CodeSctructure.png" width="300" alt="Code Structure">
+```bash
+tic-tac-toe/
+│
+├── tic_tac_toe/                    # Пакет с основным кодом игры
+│   ├── __init__.py
+│   ├── tic_tac_toe_google.py       # Модуль для работы с Google Sheets
+│   ├── tic_tac_toe_ui.py           # Модуль пользовательского интерфейса
+│   └── tic_tac_toe_tf.py           # Модуль для работы с TensorFlow
+│
+├── resources/                      # Ресурсы, такие как изображения и дополнительные файлы
+│   ├── images/
+│
+├── README.md                       # Файл README для описания проекта
+├── requirements.txt                # Файл с перечислением зависимостей
+└── run.py                          # Точка входа в приложение (если требуется)
+```
+
 
 ### Exception Handling
 
