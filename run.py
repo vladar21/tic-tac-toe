@@ -1,37 +1,53 @@
 # work with warnings
 import warnings
-# Suppress all UserWarnings
-warnings.filterwarnings('ignore', category=UserWarning)
-
 import os
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 # my library
-from tic_tac_toe_ui import display_start_game, display_board, display_leadersboard
-from tic_tac_toe_google import save_model_to_google_drive, load_data_from_google_sheets, update_leadersboard, save_board_to_google_sheets, get_model_id_by_name, download_model_from_google_drive
+from tic_tac_toe_ui import (
+    display_start_game,
+    display_board,
+    display_leadersboard
+)
+from tic_tac_toe_google import (
+    save_model_to_google_drive,
+    load_data_from_google_sheets,
+    update_leadersboard,
+    save_board_to_google_sheets,
+    get_model_id_by_name,
+    download_model_from_google_drive,
+)
 from tic_tac_toe_tf import train_model
 
+# Suppress all UserWarnings
+warnings.filterwarnings("ignore", category=UserWarning)
 
-#################################################
-############## game funcs #######################
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
+
+# ================= Game Functions ==================
+
+
 def load_or_train_model(worksheet):
     """
-    Load an existing model from Google Drive or train a new one if not available.
+    Load an existing model from Google Drive or train
+    a new one if not available.
     """
 
     try:
         file_id = get_model_id_by_name()
-        if file_id == None:
+        if file_id is None:
+            # Train model if not found
             return train_model(worksheet)
-        # Trying to download a model from Google Drive
+
+        # Download and load the model if available
         model = download_model_from_google_drive(file_id)
-        print("Model loaded successfully from Google Drive.")
+        print("Model successfully loaded from Google Drive.")
     except Exception as e:
-        print(f"An error occurred while loading the model from Google Drive: {e}")
-        # Here's the code to train the model if loading fails...
+        print(f"Error loading model from Google Drive: {e}")
+        # Fallback to training the model if loading fails
         return train_model(worksheet)
-    
+
     return model
+
 
 def player_turn(board, X_train, y_train, tic_tac_toe_data_sheet):
     """
@@ -54,6 +70,7 @@ def player_turn(board, X_train, y_train, tic_tac_toe_data_sheet):
         print("Invalid input. Please enter a number from 0 to 8.")
         return False  # Turn was not successful.
 
+
 def ai_turn(board, model, X_train, tic_tac_toe_data_sheet):
     """
     Execute the AI's turn, predict the best move, and update training data.
@@ -69,6 +86,7 @@ def ai_turn(board, model, X_train, tic_tac_toe_data_sheet):
     X_train.append(flattened_board)
     save_board_to_google_sheets(tic_tac_toe_data_sheet, board, best_move)
 
+
 def check_game_status(board):
     """
     Check the current status of the game (win, lose, draw, or ongoing).
@@ -78,25 +96,31 @@ def check_game_status(board):
     for player in [1, -1]:
         winning_positions = [
             # Horizontal
-            board[0], board[1], board[2],
+            board[0],
+            board[1],
+            board[2],
             # Vertical
             [board[0][0], board[1][0], board[2][0]],
             [board[0][1], board[1][1], board[2][1]],
             [board[0][2], board[1][2], board[2][2]],
             # Diagonals
             [board[0][0], board[1][1], board[2][2]],
-            [board[0][2], board[1][1], board[2][0]]
+            [board[0][2], board[1][1], board[2][0]],
         ]
-        
-        if any(all(pos == player for pos in win_pos) for win_pos in winning_positions):
-            return True, player  # A win is detected and return the player who won
+
+        if any(
+                all(pos == player for pos in win_pos)
+                for win_pos in winning_positions):
+            # A win is detected and return the player who won
+            return True, player
 
     # Check for a draw (all cells are filled)
     if all(cell != 0 for row in board for cell in row):
         return True, 0  # The game is a draw
-    
+
     # If no win or draw, the game is not over
     return False, None
+
 
 def check_and_handle_game_over(board, leadersboard_data_sheet, nickname):
     """
@@ -118,6 +142,7 @@ def check_and_handle_game_over(board, leadersboard_data_sheet, nickname):
         return True  # The game is over.
     return False  # The game is not over.
 
+
 def prompt_replay():
     """
     Prompt the player if they want to replay the game and return their choice.
@@ -125,81 +150,97 @@ def prompt_replay():
 
     print("\nPlay again?")
     play_or_no = input("(Y - if yes, any other - if no): \n").lower()
-    return play_or_no == 'y'
+    return play_or_no == "y"
+
 
 def game(leadersboard_data_sheet, tic_tac_toe_data_sheet, nickname):
     """
-    Main game function to run the gameplay loop, including turns and checking the game status.
+    Main game function to run the gameplay loop,
+    including turns and checking the game status.
     """
 
-    print('\nGame starting.\n')
+    print("\nGame starting.\n")
     display_start_game()
     current_player = 1
     board = [[0, 0, 0] for _ in range(3)]
     X_train = []  # Initialisation of the list for storing board states
     y_train = []  # Initialising the list for storing moves
     model = load_or_train_model(tic_tac_toe_data_sheet)
-    
+
     while True:
         if current_player == 1:
-            if not player_turn(board, X_train, y_train, tic_tac_toe_data_sheet):
+            if not player_turn(
+                    board, X_train, y_train, tic_tac_toe_data_sheet):
                 continue  # Player needs to retry their turn.
         else:
             ai_turn(board, model, X_train, tic_tac_toe_data_sheet)
-        
+
         print()
         display_board(board)
 
-        if check_and_handle_game_over(board, leadersboard_data_sheet, nickname):
+        if check_and_handle_game_over(
+                board, leadersboard_data_sheet, nickname):
             if not prompt_replay():
                 display_leadersboard(leadersboard_data_sheet)
                 print("\nGame over.\n")
                 break  # Exit the game loop.
             board = [[0, 0, 0] for _ in range(3)]  # Reset the board.
-        
+
         current_player = -current_player  # Switch players.
 
     if model is not None:
         save_model_to_google_drive(model)
 
-############## game funcs #######################
-#################################################
+
+# ================= Game Functions ==================
 
 
 def main():
     """
     Main function to initiate the game, handle user choices, and load data.
     """
-     
+
     # Load data from Google Sheets at the start of the main function
-    leadersboard_data_sheet, tic_tac_toe_data_sheet = load_data_from_google_sheets()
+    (leadersboard_data_sheet,
+     tic_tac_toe_data_sheet) = load_data_from_google_sheets()
 
     if not leadersboard_data_sheet or not tic_tac_toe_data_sheet:
         print("Error loading data from Google Sheets.")
         return  # Exit the function if data loading was unsuccessful
 
     # Main game loop
-    
+
     print("\nTic Tac Toe with Ai")
     print()
     nickname = input("Please enter your nickname: \n").strip()
 
-    start = str(input("\nDo you want to play game, exit or look at the leadersboard? \n(Y - game, L - leadersboar, any other - exit): \n"))
+    start = str(
+        input(
+            "\nDo you want to play game, exit or look at the leadersboard? "
+            "\n(Y - game, L - leadersboar, any other - exit): \n"
+        )
+    )
     start = start.lower()
     # Main game loop
-    if start == 'y':
+    if start == "y":
         game(leadersboard_data_sheet, tic_tac_toe_data_sheet, nickname)
-    elif start == 'l':
+    elif start == "l":
         display_leadersboard(leadersboard_data_sheet)
-        start = str(input("\nDo you want to play game or exit? \n(Y - game, any other - exit): \n"))
+        start = str(
+            input(
+                "\nDo you want to play game or exit? \n(Y - game, "
+                "any other - exit): \n"
+            )
+        )
         start = start.lower()
-        if start == 'y':
+        if start == "y":
             game(leadersboard_data_sheet, tic_tac_toe_data_sheet, nickname)
         else:
             print("\nGame over.\n")
     else:
         print("\nGame over.\n")
-        
+
+
 # Ensure that the main function is called when the script is executed
 if __name__ == "__main__":
     main()
