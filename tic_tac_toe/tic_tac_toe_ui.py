@@ -53,7 +53,7 @@ def display_board(board):
     Used cells on the reference board are replaced with an asterisk (*).
     """
     # Create a copy of the board with cell numbers
-    numbers_board = [[str(i + 1 + j * 3) for i in range(3)] for j in range(3)]
+    numbers_board = [[str(i + j * 3) for i in range(3)] for j in range(3)]
 
     # Replace numbers with '*' in the numbers_board where
     # the corresponding cell in the board is not empty

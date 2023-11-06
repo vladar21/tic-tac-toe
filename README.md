@@ -189,6 +189,16 @@ tic-tac-toe/
 
   <img src="resources/images/ErrorPacketNameFixed.png" width="600" alt="Fixed import library name">
 
+  ### 2. Incorrect start number in help positions table
+
+- **Description:** It must be starting from 0.
+
+  <img src="resources/images/ErrorWrongStartNumberInPositionsBoard.png" width="600" alt="Incorrect start number">
+
+- **Solution:** Fixed import library name.
+
+  <img src="resources/images/ErrorPacketNameFixed.png" width="600" alt="Fixed import library name">
+
 [Back to Table of Contents](#table-of-contents)
 
 ---
