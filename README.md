@@ -119,7 +119,78 @@
 
 ### Heroku Deployment
 
-- Detailed steps are provided on how the game was deployed on Heroku, allowing users to access it through a web interface.
+Heroku is a cloud platform that allows developers to build, run, and operate applications entirely in the cloud. Follow the instructions below to deploy your Tic Tac Toe game with AI on Heroku:
+
+#### Prerequisites
+
+- A Heroku account – Sign up [here](https://signup.heroku.com/) if you don't have one.
+- The Heroku CLI – Download and install it from [here](https://devcenter.heroku.com/articles/heroku-cli#download-and-install).
+- Git installed on your machine.
+
+#### Steps for Deployment
+
+1. **Login to Heroku**: After installing the Heroku CLI, open your terminal and log in to your Heroku account:
+
+    ```bash
+    heroku login
+    ```
+
+    Your web browser will open for you to log in to your Heroku account.
+
+2. **Create a Heroku App**: Create a new app on Heroku:
+
+    ```bash
+    heroku create your-app-name
+    ```
+
+    Replace `your-app-name` with a unique name for your application. Heroku will provide you with a web URL and a git URL for deployment.
+
+3. **Prepare Your Application**: Make sure your application meets Heroku's requirements. For Python, you'll need a `Procfile` and possibly a `runtime.txt`:
+
+    - `Procfile`: This file tells Heroku how to run your application. It should be in the root directory of your repository and contain the following:
+
+        ```
+        web: node index.js
+        ```
+
+    - `runtime.txt`: This optional file specifies a particular Python version for Heroku to use:
+
+        ```
+        python-3.8.10
+        ```
+
+        Specify the Python version that matches your development environment.
+
+4. **Commit to Git**: If you’ve made any changes like adding `Procfile` or `runtime.txt`, commit them to your git repository:
+
+    ```bash
+    git add .
+    git commit -m "Added Heroku deployment files"
+    ```
+
+5. **Deploy to Heroku**: Deploy your code to Heroku:
+
+    ```bash
+    git push heroku main
+    ```
+
+    Heroku will now receive your code and start building your app using the Heroku Python buildpack.
+
+6. **Ensure at Least One Instance of the App is Running**:
+
+    ```bash
+    heroku ps:scale web=1 --app your-app-name
+    ```
+
+    This command tells Heroku to run a single instance of your web app.
+
+7. **Open Your Application**: You can now open your app in the browser:
+
+    ```bash
+    heroku open --app your-app-name
+    ```
+
+    Alternatively, you can visit the URL provided by Heroku in step 2.
 
 ---
 
