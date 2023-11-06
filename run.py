@@ -178,7 +178,7 @@ def game(leadersboard_data_sheet, tic_tac_toe_data_sheet, nickname):
         if check_and_handle_game_over(
                 board, leadersboard_data_sheet, nickname):
             if not prompt_replay():
-                display_leadersboard(leadersboard_data_sheet)
+                display_leadersboard(leadersboard_data_sheet, nickname)
                 print("\nGame over.\n")
                 break  # Exit the game loop.
             board = [[0, 0, 0] for _ in range(3)]  # Reset the board.
@@ -222,7 +222,7 @@ def main():
     if start == "y":
         game(leadersboard_data_sheet, tic_tac_toe_data_sheet, nickname)
     elif start == "l":
-        display_leadersboard(leadersboard_data_sheet)
+        display_leadersboard(leadersboard_data_sheet, nickname)
         start = str(
             input(
                 "\nDo you want to play game or exit? \n(Y - game, "

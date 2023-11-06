@@ -55,10 +55,10 @@ def display_board(board):
     print()  # Print a newline at the end for better formatting
 
 
-def display_leadersboard(leadersboard_data_sheet):
+def display_leadersboard(leadersboard_data_sheet, current_player_nickname):
     """
     Fetch and display the leadersboard with the rankings based on
-    past game outcomes.
+    past game outcomes. The current player's row will be highlighted.
     """
 
     # Fetching the data from the sheet
@@ -75,6 +75,10 @@ def display_leadersboard(leadersboard_data_sheet):
         "Win AI",
         "Draw"
         ]
+
+    # Define ANSI codes for highlighting
+    HIGHLIGHT_START = "\033[93m"  # Yellow text
+    HIGHLIGHT_END = "\033[0m"     # Reset to default text color
 
     # If there are no data rows or only header row,
     # print the headers and return
@@ -112,5 +116,9 @@ def display_leadersboard(leadersboard_data_sheet):
     for i, row_data in enumerate(leadersboard_data[1:], start=1):
         # If the row has less columns than headers, append empty strings
         row_data += [""] * (len(headers) - len(row_data))
+        formatted_row = row_format.format(i, *row_data)
+        # Highlight the current player's row
+        if row_data[0] == current_player_nickname:
+            formatted_row = HIGHLIGHT_START + formatted_row + HIGHLIGHT_END
         # Print each row with the correct number for 'PP'
-        print(row_format.format(i, *row_data))
+        print(formatted_row)
