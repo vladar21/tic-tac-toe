@@ -18,8 +18,8 @@ def display_start_game():
         " or horizontally."
     )
     print("First Move:")
-    print("    By default, the player has the right to make the first move in the"
-          " first game.")
+    print("    By default, the player has the right to make the first move"
+          " in the first game.")
     print("Alternating First Move:")
     print("    In subsequent games, the right to the first move alternates.")
     print("    The AI will make the first move in the second game,")
