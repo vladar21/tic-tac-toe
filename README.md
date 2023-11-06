@@ -119,18 +119,18 @@ This console game "Tic-tac-toe Crosses" allows you to play a classic game with a
 ```bash
 tic-tac-toe/
 │
-├── tic_tac_toe/                    # Пакет с основным кодом игры
-│   ├── __init__.py
-│   ├── tic_tac_toe_google.py       # Модуль для работы с Google Sheets
-│   ├── tic_tac_toe_ui.py           # Модуль пользовательского интерфейса
-│   └── tic_tac_toe_tf.py           # Модуль для работы с TensorFlow
+├── tic_tac_toe/                    # Main game code package
+│   ├── __init__.py                 # Initializes the tic_tac_toe package
+│   ├── tic_tac_toe_google.py       # Module for interacting with Google Sheets
+│   ├── tic_tac_toe_ui.py           # User interface module
+│   └── tic_tac_toe_tf.py           # Module for TensorFlow operations
 │
-├── resources/                      # Ресурсы, такие как изображения и дополнительные файлы
-│   ├── images/
+├── resources/                      # Resources such as images and additional files
+│   ├── images/                     # Directory for storing image files
 │
-├── README.md                       # Файл README для описания проекта
-├── requirements.txt                # Файл с перечислением зависимостей
-└── run.py                          # Точка входа в приложение (если требуется)
+├── README.md                       # README file for project description
+├── requirements.txt                # File listing the dependencies to install
+└── run.py                          # Entry point for the application (if required)
 ```
 
 
