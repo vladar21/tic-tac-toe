@@ -1,4 +1,8 @@
 def display_start_game():
+    """
+    Display the starting information for the game, including rules and the initial game board.
+    """
+     
     print('Game rules:')
     print("Your turn will have symbol 'X', the AI turn - symbol 'O'.")
     print("The winner must have three of their symbols in a line, vertically or horizontally.")
@@ -12,6 +16,10 @@ def display_start_game():
 
 
 def display_board(board):
+    """
+    Display the current state of the game board with symbols 'X', 'O', or empty spaces.
+    """
+
     # Get the total number of rows
     num_rows = len(board)
 
@@ -27,6 +35,10 @@ def display_board(board):
 
 
 def display_leadersboard(leadersboard_data_sheet):
+    """
+    Fetch and display the leadersboard with the rankings based on past game outcomes.
+    """
+    
     # Fetching the data from the sheet
     leadersboard_data = leadersboard_data_sheet.get_all_values()
 
