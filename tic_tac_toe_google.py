@@ -40,6 +40,10 @@ SERVICE = build('drive', 'v3', credentials=CREDENTIALS)
 MODEL_NAME = "tic_tac_toe_model.h5"
 
 def share_file_with_user(file_id, user_email):
+    """
+    Shares a Google Drive file with a specified user, granting them write access.
+    """
+
     user_permission = {
         'type': 'user',
         'role': 'writer',
@@ -52,6 +56,9 @@ def share_file_with_user(file_id, user_email):
     ).execute()
 
 def save_model_to_google_drive(model):
+    """
+    Serializes and uploads a Keras model to Google Drive in HDF5 format.
+    """
 
     # Serializing a Keras model in h5 format into memory
     model_buffer = io.BytesIO()
@@ -82,6 +89,10 @@ def save_model_to_google_drive(model):
     print()
 
 def get_model_id_by_name():
+    """
+    Retrieves the file ID of a Keras model stored in Google Drive by its name.
+    """
+
     results = SERVICE.files().list(
         q=f"name='{MODEL_NAME}'",
         pageSize=10,
@@ -100,6 +111,10 @@ def get_model_id_by_name():
         return model_id
 
 def download_model_from_google_drive(file_id):
+    """
+    Downloads a Keras model from Google Drive using its file ID and compiles it.
+    """
+
     request = SERVICE.files().get_media(fileId=file_id)
     fh = io.BytesIO()
     downloader = MediaIoBaseDownload(fh, request)
@@ -123,6 +138,10 @@ def download_model_from_google_drive(file_id):
     return model
 
 def load_data_from_google_sheets():
+    """
+    Attempts to open a specific Google Sheets spreadsheet and its worksheets.
+    """
+
     # Try to open the spreadsheet and the worksheets within it.
     try:
         sheet = CLIENT.open('tic_tac_toe')
@@ -141,6 +160,9 @@ def load_data_from_google_sheets():
     return leadersboard_data_sheet, tic_tac_toe_data_sheet
 
 def update_leadersboard(leadersboard_data_sheet, nickname, result):
+    """
+    Updates or adds a player's result to the leadersboard in a Google Sheet.
+    """
 
     # Fetching the current data from the sheet
     leadersboard_data = leadersboard_data_sheet.get_all_values()
@@ -184,6 +206,10 @@ def update_leadersboard(leadersboard_data_sheet, nickname, result):
         leadersboard_data_sheet.append_row(new_row_values)
 
 def save_board_to_google_sheets(worksheet, board, move):
+    """
+    Saves the current state of the Tic Tac Toe board and the last move to a Google Sheet.
+    """
+
     board_str = "".join(["X" if cell == 1 else "O" if cell == -1 else " " for row in board for cell in row])
     data_to_insert = [[board_str, move]]
     worksheet.insert_rows(data_to_insert, 2)
