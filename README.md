@@ -117,7 +117,15 @@ This console game "Tic-tac-toe Crosses" allows you to play a classic game with a
 
 ## Bugs
 
-- [Under Constraction].
+### 1. Import could not be resolved
+
+- **Description:** Incorrect import library name.
+
+  <img src="images/ErrorPacketName.png" width="600" alt="Incorrect import library name">
+
+- **Solution:** Fixed import library name.
+
+  <img src="images/ErrorPacketNameFixed.png" width="600" alt="Fixed import library name">
 
 [Back to Table of Contents](#table-of-contents)
 
