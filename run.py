@@ -146,7 +146,7 @@ def prompt_replay():
     """
 
     print("\nPlay again?")
-    play_or_no = input("(Y - if yes, any other - if no): \n").lower()
+    play_or_no = input("(y or Y - if yes, any other - if no): \n").lower()
     return play_or_no == "y"
 
 
@@ -214,7 +214,7 @@ def main():
     start = str(
         input(
             "\nDo you want to play game, exit or look at the leadersboard? "
-            "\n(Y - game, L - leadersboar, any other - exit): \n"
+            "\n(y or Y - game, l or L - leadersboar, any other - exit): \n"
         )
     )
     start = start.lower()
@@ -225,7 +225,7 @@ def main():
         display_leadersboard(leadersboard_data_sheet, nickname)
         start = str(
             input(
-                "\nDo you want to play game or exit? \n(Y - game, "
+                "\nDo you want to play game or exit? \n(y or Y - game, "
                 "any other - exit): \n"
             )
         )
