@@ -62,9 +62,7 @@ The AI learns with each game and sometimes makes surprisingly good moves already
 
 ---
 
-## Design
-
-### Flowchart 
+## Flowchart 
 
 - The flowchart details the logic of the game, the decision-making process of the AI, and the interactions between different modules of the application.
 
@@ -75,6 +73,11 @@ The AI learns with each game and sometimes makes surprisingly good moves already
 ---
 
 ## Features
+
+### Turns
+
+- **First Move**: By default, the player has the right to make the first move in the initial game. 
+- **Alternating First Move**: In subsequent games, the right to the first move alternates. The AI will make the first move in the second game, the player in the third, and so on, ensuring a fair and balanced game experience.
 
 ### Welcome Screen
 
