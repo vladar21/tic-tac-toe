@@ -78,7 +78,7 @@ def save_model_to_google_drive(model):
                                   media_body=media,
                                   fields='id').execute()
     
-    print(f'Model {MODEL_NAME} ID: {file.get("id")} success updated.')
+    print(f'Model {MODEL_NAME} ID: {file.get("id")} success updated')
     print()
 
 def get_model_id_by_name():

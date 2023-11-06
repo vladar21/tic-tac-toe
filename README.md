@@ -109,6 +109,8 @@ This console game "Tic-tac-toe Crosses" allows you to play a classic game with a
 - Custom-designed user interface functions (`tic_tac_toe_ui.py`) facilitate player interaction and display the game state in a clear and intuitive manner.
 - The game board and leaderboard are displayed in the console, making the game easily playable from any terminal.
 
+<img src="images/LeaderBoard.png" width="600" alt="Game Leaderboard">
+
 ### Code Structure and Management
 
 - Modular coding approach, separating concerns into distinct files (`run.py`, `tic_tac_toe_ui.py`, `tic_tac_toe_google.py`, `tic_tac_toe_tf.py`) for ease of maintenance and scalability.
