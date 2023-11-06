@@ -274,14 +274,22 @@ Please ensure you adhere to the contribution guidelines provided by the reposito
 
 ### Code
 
-- Attribution to open-source libraries and code snippets that were utilized in the creation of the game.
+- [TensorFlow](https://www.tensorflow.org/): An open-source machine learning library used to develop and train the AI model for the game.
+- [Google API Python Client](https://github.com/googleapis/google-api-python-client): Provides tools for the Python language to interact with Google services, used here for Google Sheets and Google Drive integration.
+- [gspread](https://gspread.readthedocs.io/en/latest/): A Python API for Google Sheets, used for handling leaderboard and game state data.
+- [OAuth2Client](https://oauth2client.readthedocs.io/en/latest/): A library for OAuth version 2.0, used to authorize the app to access Google Sheets and Drive.
 
 ### Design
 
-- Recognition of any design inspiration or assets that were used to create the user interface.
+The user interface of the Tic Tac Toe game is the result of thoughtful design considerations aimed at providing a simple, intuitive, and enjoyable experience. Key inspirations and design assets used are acknowledged below:
+
+- __Minimalist Aesthetic__: The clean and uncluttered look of the game draws on the principles of minimalist design to avoid distractions and focus on gameplay.
+- __Classic Tic Tac Toe Influence__: The classic Tic Tac Toe board, a simple grid, sets the fundamental visual structure for the game, providing immediate familiarity to users.
 
 ### Acknowledgements
 
-- Special thanks to individuals who have contributed to the ideation, development, and testing phases of the game.
+-   My Mentor - Oluwafemi Medale - for continuous helpful feedback.
+
+-   Tutor support at Code Institute for their support.
 
 [Back to Table of Contents](#table-of-contents)
