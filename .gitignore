@@ -6,6 +6,7 @@ __pycache__/
 *.py[cod]
 node_modules/
 .github/
+.vscode/
 
 creds.json
 tic_tac_toe_model
