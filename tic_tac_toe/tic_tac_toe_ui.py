@@ -13,17 +13,14 @@ def display_start_game():
 
     print("Game rules:")
     print("Your turn will have symbol 'X', the AI turn - symbol 'O'.")
-    print(
-        "The winner must have three of their symbols in a line, vertically"
-        " or horizontally."
-    )
-    print("First Move:")
-    print("    By default, the player has the right to make the first move"
+    print("Winner must have three of their symbols in a line, vertically"
+          " or horizontally.")
+    print("Turn order: you have the right to make the first move"
           " in the first game.")
-    print("Alternating First Move:")
-    print("    In subsequent games, the right to the first move alternates.")
-    print("    The AI will make the first move in the second game,")
-    print("    the player in the third, and so on, etc.")
+    print("In subsequent games, the right"
+          " to the first move alternates.")
+    print("The AI will make the first move in the second game,"
+          " the player in the third, and so on, etc.")
 
     print("\nGameplay field: ")
     start_board = ["0", "1", "2", "3", "4", "5", "6", "7", "8"]
