@@ -15,6 +15,10 @@ from tic_tac_toe_tf import train_model
 #################################################
 ############## game funcs #######################
 def load_or_train_model(worksheet):
+    """
+    Load an existing model from Google Drive or train a new one if not available.
+    """
+
     try:
         file_id = get_model_id_by_name()
         if file_id == None:
@@ -30,6 +34,10 @@ def load_or_train_model(worksheet):
     return model
 
 def player_turn(board, X_train, y_train, tic_tac_toe_data_sheet):
+    """
+    Handle the player's turn, validate the move, and update training data.
+    """
+
     try:
         print()
         move = int(input("Your move (0-8): \n"))
@@ -47,6 +55,10 @@ def player_turn(board, X_train, y_train, tic_tac_toe_data_sheet):
         return False  # Turn was not successful.
 
 def ai_turn(board, model, X_train, tic_tac_toe_data_sheet):
+    """
+    Execute the AI's turn, predict the best move, and update training data.
+    """
+
     flattened_board = [cell for row in board for cell in row]
     board_as_input = [flattened_board]
     prediction = model.predict(board_as_input)[0]
@@ -58,6 +70,10 @@ def ai_turn(board, model, X_train, tic_tac_toe_data_sheet):
     save_board_to_google_sheets(tic_tac_toe_data_sheet, board, best_move)
 
 def check_game_status(board):
+    """
+    Check the current status of the game (win, lose, draw, or ongoing).
+    """
+
     # Check for a win for each player
     for player in [1, -1]:
         winning_positions = [
@@ -83,6 +99,10 @@ def check_game_status(board):
     return False, None
 
 def check_and_handle_game_over(board, leadersboard_data_sheet, nickname):
+    """
+    Check if the game is over and handle the updating of the leaderboard.
+    """
+
     game_over, winner = check_game_status(board)
     if game_over:
         if winner == 1:
@@ -99,11 +119,19 @@ def check_and_handle_game_over(board, leadersboard_data_sheet, nickname):
     return False  # The game is not over.
 
 def prompt_replay():
+    """
+    Prompt the player if they want to replay the game and return their choice.
+    """
+
     print("\nPlay again?")
     play_or_no = input("(Y - if yes, any other - if no): \n").lower()
     return play_or_no == 'y'
 
 def game(leadersboard_data_sheet, tic_tac_toe_data_sheet, nickname):
+    """
+    Main game function to run the gameplay loop, including turns and checking the game status.
+    """
+
     print('\nGame starting.\n')
     display_start_game()
     current_player = 1
@@ -139,6 +167,10 @@ def game(leadersboard_data_sheet, tic_tac_toe_data_sheet, nickname):
 
 
 def main():
+    """
+    Main function to initiate the game, handle user choices, and load data.
+    """
+     
     # Load data from Google Sheets at the start of the main function
     leadersboard_data_sheet, tic_tac_toe_data_sheet = load_data_from_google_sheets()
 
