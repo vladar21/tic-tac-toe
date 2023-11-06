@@ -66,6 +66,8 @@ This console game "Tic-tac-toe Crosses" allows you to play a classic game with a
 
 - The flowchart details the logic of the game, the decision-making process of the AI, and the interactions between different modules of the application.
 
+![Flowchart](images/tic_tac_toe_game_diagram.png)
+
 [Back to Table of Contents](#table-of-contents)
 
 ---
