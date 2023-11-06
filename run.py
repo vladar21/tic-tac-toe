@@ -152,14 +152,14 @@ def main():
     print()
     nickname = input("Please enter your nickname: \n").strip()
 
-    start = str(input("Do you want to play game, exit or look at the leadersboard? \n(Y - game, L - leadersboar, any other - exit): \n"))
+    start = str(input("\nDo you want to play game, exit or look at the leadersboard? \n(Y - game, L - leadersboar, any other - exit): \n"))
     start = start.lower()
     # Main game loop
     if start == 'y':
         game(leadersboard_data_sheet, tic_tac_toe_data_sheet, nickname)
     elif start == 'l':
         display_leadersboard(leadersboard_data_sheet)
-        start = str(input("Do you want to play game or exit? \n(Y - game, any other - exit): \n"))
+        start = str(input("\nDo you want to play game or exit? \n(Y - game, any other - exit): \n"))
         start = start.lower()
         if start == 'y':
             game(leadersboard_data_sheet, tic_tac_toe_data_sheet, nickname)

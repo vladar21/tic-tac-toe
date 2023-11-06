@@ -78,35 +78,51 @@ This console game "Tic-tac-toe Crosses" allows you to play a classic game with a
 
 - A friendly interface greets the user and presents them with options to start a new game, view the leaderboard, or exit.
 
+<img src="images/WelcomeScreen.png" width="600" alt="Welcome Screen">
+
 ### Game Rules
 
 - The rules are succinctly outlined for quick reference for new and returning players.
+
+<img src="images/GameRules.png" width="600" alt="Game Rules">
 
 ### Game Play
 
 - The game play is turn-based, with the user making moves against the AI. The state of the game is displayed after each move, and the game announces the winner or a draw when the game concludes.
 
+<img src="images/GamePlay.png" width="600" alt="Game Play">
+
 ### Game Logic
+
 - The core gameplay is driven by Python scripts that manage the game state, enforce rules, and determine win conditions.
 - AI moves are calculated using a pre-trained TensorFlow model, ensuring that each move is optimized based on historical gameplay data.
 
 ### Data Integration
+
 - Game data is integrated with Google Sheets, providing a seamless experience for data tracking and leaderboard updates.
 - Google Drive API is utilized for model storage and retrieval, allowing the AI to dynamically update based on new gameplay data.
 
+<img src="images/DataIntegration.png" width="600" alt="Data Integration">
+
 ### User Interface
+
 - Custom-designed user interface functions (`tic_tac_toe_ui.py`) facilitate player interaction and display the game state in a clear and intuitive manner.
 - The game board and leaderboard are displayed in the console, making the game easily playable from any terminal.
 
 ### Code Structure and Management
+
 - Modular coding approach, separating concerns into distinct files (`run.py`, `tic_tac_toe_ui.py`, `tic_tac_toe_google.py`, `tic_tac_toe_tf.py`) for ease of maintenance and scalability.
 - Scripts for handling UI presentation, Google operations, and TensorFlow model management are included to keep the main game script (`run.py`) clean and focused on game flow.
 
+<img src="images/CodeSctructure.png" width="300" alt="Code Structure">
+
 ### Exception Handling
+
 - Comprehensive error and exception handling to ensure the game remains stable and responsive in all scenarios.
 - Specific attention is given to network-related operations where external service disruptions may occur.
 
 ### Compatibility and Standards
+
 - Code is written to be Pythonic and follows PEP 8 standards, ensuring readability and maintainability.
 - Cross-platform compatibility is considered, with the game being testable on various operating systems.
 
