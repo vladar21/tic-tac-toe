@@ -2,21 +2,18 @@
 import warnings
 import os
 
-# my library
-from tic_tac_toe_ui import (
+from tic_tac_toe import (
     display_start_game,
     display_board,
-    display_leadersboard
-)
-from tic_tac_toe_google import (
+    display_leadersboard,
     save_model_to_google_drive,
     load_data_from_google_sheets,
     update_leadersboard,
     save_board_to_google_sheets,
     get_model_id_by_name,
     download_model_from_google_drive,
+    train_model
 )
-from tic_tac_toe_tf import train_model
 
 # Suppress all UserWarnings
 warnings.filterwarnings("ignore", category=UserWarning)
