@@ -125,13 +125,75 @@
 
 ### Clone a Repository Code Locally
 
-- Instructions for cloning the repository are provided to enable other developers to run the game locally and contribute to its development.
+To clone the repository and run this Tic Tac Toe game locally on your machine, you will need to follow these steps:
 
----
+#### Prerequisites
 
-### Forking in GitHub
+Before you begin, make sure you have the following installed:
+- [Git](https://git-scm.com/downloads)
+- Python (at least version 3.6)
+- A text editor or an IDE (like Visual Studio Code, PyCharm, etc.)
 
-- Guidelines on how to fork the repository on GitHub are available, encouraging open-source collaboration.
+#### Cloning the Repository
+
+1. **Open Terminal**: Open your terminal, command prompt, or Git bash in the directory where you wish to clone the repository.
+
+2. **Clone the Repository**: Use the following Git command to clone the repository:
+
+    ```bash
+    git clone https://github.com/your-username/tic-tac-toe-with-ai.git
+    ```
+
+    Replace `your-username` with the actual username where the repository exists.
+
+3. **Navigate to the Repository Directory**: Once the repository has been cloned, navigate to the cloned repository directory:
+
+    ```bash
+    cd tic-tac-toe-with-ai
+    ```
+
+4. **Create a Virtual Environment** (optional but recommended): Run the following commands to create and activate a virtual environment:
+
+    For Windows:
+    ```bash
+    python -m venv venv
+    .\venv\Scripts\activate
+    ```
+
+    For macOS and Linux:
+    ```bash
+    python3 -m venv venv
+    source venv/bin/activate
+    ```
+
+5. **Install Dependencies**: Install all the required dependencies by running:
+
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+    This command reads the `requirements.txt` file and installs all the Python packages needed for the game to run.
+
+6. **Run the Game**: You can now run the game using the following command:
+
+    ```bash
+    python main.py
+    ```
+
+    Replace `main.py` with the actual entry script if it’s named differently.
+
+#### Contribute to the Development
+
+If you want to contribute to the game's development, it's generally a good practice to:
+
+1. Fork the repository.
+2. Clone your forked version of the repository.
+3. Create a new branch for your feature or fix.
+4. Make your changes and commit them with descriptive commit messages.
+5. Push the changes to your fork.
+6. Open a pull request to the original repository.
+
+Please ensure you adhere to the contribution guidelines provided by the repository owner.
 
 [Back to Table of Contents](#table-of-contents)
 
