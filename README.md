@@ -177,7 +177,7 @@ Before you begin, make sure you have the following installed:
 6. **Run the Game**: You can now run the game using the following command:
 
     ```bash
-    python main.py
+    python run.py
     ```
 
     Replace `main.py` with the actual entry script if it’s named differently.
