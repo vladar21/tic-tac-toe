@@ -2,7 +2,7 @@
 
 Play tic-tac-toe with artificial intelligence? This could be fun!
 
-[View the live project here.](https://tic-tac-toe-with-ai-pygame-2d980f4c2d09.herokuapp.com/)
+[view the live project here.](https://tic-tac-toe-with-ai-pygame-2d980f4c2d09.herokuapp.com/)
 
 ![Start display](resources/images/tic_tac_toe_start.jpg)
 
@@ -110,6 +110,7 @@ The AI learns with each game and sometimes makes surprisingly good moves already
 
 - Custom-designed user interface functions (`tic_tac_toe_ui.py`) facilitate player interaction and display the game state in a clear and intuitive manner.
 - The game board and leaderboard are displayed in the console, making the game easily playable from any terminal.
+- Current player's position and score are highlighted in yellow color to easily track their standing among other players.
 
 <img src="resources/images/LeaderBoard.png" width="800" alt="Game Leaderboard">
 
@@ -195,9 +196,9 @@ tic-tac-toe/
 
   <img src="resources/images/ErrorWrongStartNumberInPositionsBoard.png" width="600" alt="Incorrect start number">
 
-- **Solution:** Fixed import library name.
+- **Solution:** Fixed one line in display_board func (tic_tac_toe_ui module)
 
-  <img src="resources/images/ErrorPacketNameFixed.png" width="600" alt="Fixed import library name">
+  <img src="resources/images/ErrorWrongStartNumberInPositionsBoardFix.png" width="600" alt="Fixed incorrect first number">
 
 [Back to Table of Contents](#table-of-contents)
 
